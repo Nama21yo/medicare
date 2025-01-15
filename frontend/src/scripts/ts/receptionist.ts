@@ -21,6 +21,15 @@ interface Doctor {
   updated_at: string;
 }
 
+interface Recepetionist {
+  user_id: number;
+  username: string;
+  email: string;
+  password: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Queue {
   status: number; // 1 - Not Pending, 2 - Pending, 3 - Resolved Pending
   patient: Patient;

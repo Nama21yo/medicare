@@ -65,6 +65,7 @@ function renderUsers(users: Queue[]): void {
                 : "Not Pending"
             }</td>
             <td>
+                <button class="btn btn-secondary btn-sm pend-btn" onclick="viewRecordHistory(${index})">View Diagnosis</button>
                 <button class="btn btn-secondary btn-sm pend-btn" onclick="pendUser(${index})">
                     ${
                       user.status === 2
@@ -81,6 +82,18 @@ function renderUsers(users: Queue[]): void {
   });
   updateCounters();
 }
+
+//View record history
+
+const viewRecordHistory = async (index: number): Promise<void> => {
+  const Current_patient = users[index];
+  const Current_doctor = users[index];
+  const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
+  const patientId = Current_patient.patient.patient_id; // Assuming 'patient_id' is a property of the patient object
+
+  // Redirect to the diagnosis_page.html with the patient_id as a query parameter
+  window.location.href = `diagnosis_page.html?patient_id=${patientId}`;
+};
 
 // Adds event listeners to all pend buttons
 // function addPendEventListeners(): void {
