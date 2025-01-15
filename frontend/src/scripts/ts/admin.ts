@@ -1,89 +1,145 @@
+// Check for JWT token on load
+const checkJwtToken = (): void => {
+  const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
+  if (!jwtToken) {
+    window.location.href = "http://127.0.0.1:5500/frontend/src/index.html";
+  }
+};
+
+// Call the checkJwtToken function on load
+checkJwtToken();
+// Define User interface
 interface User {
-    name: string;
-    email: string;
-    accountStatus: string;
-    role: string;
+  user_id: number;
+  name: string;
+  email: string;
+  accountStatus: string;
+  role: { name: string };
 }
 
-// Sample data
-const users: User[] = [
-    { name: "Dr. John Doe", email: "johndoe@example.com", accountStatus: "active", role: "doctor" },
-    { name: "Jane Doe", email: "janedoe@example.com", accountStatus: "restricted", role: "receptionist" },
-    // Add more sample users as needed
-];
+// Sample data (initially empty)
+let employees: User[] = [];
+let totalDoctors: number = 0;
+let totalReceptionists: number = 0;
 
-let totalDoctors: number = users.filter(user => user.role === "doctor").length;
-let totalReceptionists: number = users.filter(user => user.role === "receptionist").length;
-let restrictedAccounts: number = users.filter(user => user.accountStatus === "restricted").length;
+// Fetch data from the API
+const fetchEmployeesData = async (): Promise<void> => {
+  try {
+    const response = await fetch("http://localhost:4000/api/v1/users");
+    const users: User[] = await response.json();
 
-// Renders the user table
-function renderUsers(users: User[]): void {
-    const userTableBody = document.getElementById('userTableBody') as HTMLElement;
-    userTableBody.innerHTML = '';
-    users.forEach((user, index) => {
-        const rowClass = user.accountStatus === "restricted" ? "restricted" : "";
-        const row = `<tr class="${rowClass}">
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.accountStatus}</td>
-            <td>${user.role}</td>
-            <td>
-                <button class="btn btn-danger btn-sm" onclick="deleteUser(${index})">Delete</button>
-                <button class="btn btn-warning btn-sm" onclick="restrictUser(${index})">${user.accountStatus === "restricted" ? "Unrestrict" : "Restrict"}</button>
-            </td>
-        </tr>`;
-        userTableBody.innerHTML += row;
-    });
-    updateCounters();
-}
 
-// Deletes a user
-function deleteUser(index: number): void {
-    const deletedUser = users.splice(index, 1)[0];
-    if (deletedUser.role === "doctor") {
-        totalDoctors--;
-    } else if (deletedUser.role === "receptionist") {
-        totalReceptionists--;
-    }
-    if (deletedUser.accountStatus === "restricted") {
-        restrictedAccounts--;
-    }
-    renderUsers(users);
-}
-
-// Restricts or unrestricts a user
-function restrictUser(index: number): void {
-    const user = users[index];
-    if (user.accountStatus === "active") {
-        user.accountStatus = "restricted";
-        restrictedAccounts++;
-    } else {
-        user.accountStatus = "active";
-        restrictedAccounts--;
-    }
-    renderUsers(users);
-}
-
-// Implements search functionality
-function filterUsers(): void {
-    const searchValue = (document.getElementById('searchInput') as HTMLInputElement).value.toLowerCase();
-    const filteredUsers = users.filter(user => 
-        user.name.toLowerCase().includes(searchValue) || 
-        user.email.toLowerCase().includes(searchValue) ||
-        user.accountStatus.toLowerCase().includes(searchValue) ||
-        user.role.toLowerCase().includes(searchValue)
+    // Filter users to show only Receptionists and Doctors
+    employees = users.filter(
+      (user) => user.role.name === "Receptionist" || user.role.name === "Doctor"
     );
-    renderUsers(filteredUsers);
+
+
+    // Update the counters based on the fetched users
+    totalDoctors = employees.filter(
+      (user) => user.role.name === "Doctor"
+    ).length;
+    totalReceptionists = employees.filter(
+      (user) => user.role.name === "Receptionist"
+    ).length;
+
+
+    // Render the filtered employees
+    renderEmployees(employees);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+// Render employees
+const renderEmployees = (employees: User[]): void => {
+  const userTableBody = document.getElementById("userTableBody") as HTMLTableSectionElement;
+  userTableBody.innerHTML = "";
+
+  employees.forEach((user, index) => {
+    const row = `
+      <tr>
+        <td>${user.username}</td>
+        <td>${user.email}</td>
+        <td>${user.user_id}</td>
+        <td>${user.role.name}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="deleteEmployee(${index})">Delete</button>
+        </td>
+      </tr>`;
+    userTableBody.innerHTML += row;
+  });
+
+
+  updateEmployeeCounters();
+};
+
+
+
+// Delete User
+const deleteEmployee = async (index: number): Promise<void> => {
+
+  const userToBeDeleted = employees[index];
+
+  if (!userToBeDeleted) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:4000/api/v1/users/${userToBeDeleted.user_id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete user: ${response.statusText}`);
+    }
+
+    if (userToBeDeleted.role.name === "Doctor") {
+      totalDoctors--;
+    } else if (userToBeDeleted.role.name === "Receptionist") {
+      totalReceptionists--;
+    }
+
+    employees.splice(index, 1);
+    renderEmployees(employees);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Filter employees
+function filterEmployees(): void {
+  const searchValue = (
+    document.getElementById("searchInput") as HTMLInputElement
+  ).value.toLowerCase();
+
+  const filteredUsers = employees.filter(
+    (user) =>
+      user.username.toLowerCase().startsWith(searchValue) ||
+      user.email.toLowerCase().startsWith(searchValue) ||
+      user.role.name.toLowerCase().startsWith(searchValue)
+  );
+  
+  renderEmployees(filteredUsers);
 }
 
-// Updates the counters for total doctors, receptionists, and restricted accounts
-function updateCounters(): void {
-    (document.getElementById('totalDoctors') as HTMLElement).innerText = totalDoctors.toString();
-    (document.getElementById('totalReceptionists') as HTMLElement).innerText = totalReceptionists.toString();
-    (document.getElementById('restrictedAccounts') as HTMLElement).innerText = restrictedAccounts.toString();
+// Update counters
+function updateEmployeeCounters(): void {
+  (document.getElementById("totalDoctors") as HTMLElement).innerText =
+    totalDoctors.toString();
+  (document.getElementById("totalReceptionists") as HTMLElement).innerText =
+    totalReceptionists.toString();
 }
 
-// Initial rendering of users
-document.addEventListener('DOMContentLoaded', () => {
-    renderUsers(users);
-});
+// Logs out the user by clearing the JWT and redirecting to the login page
+function logoutUser(): void {
+  localStorage.removeItem("jwtToken");
+  sessionStorage.removeItem("jwtToken");
+
+  window.location.href = "http://127.0.0.1:5500/frontend/src/index.html";
+}
+// Attach the logout function to the logout button
+document.getElementById("logout")?.addEventListener("click", logoutUser);
+
+// Call the function to fetch and render employees on page load
+fetchEmployeesData();

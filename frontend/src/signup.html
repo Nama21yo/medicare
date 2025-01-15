@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SignUp and Login Pages</title>
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="form-box">
+        <div class="button">
+          <div id="btn"></div>
+          <button type="button" class="toggle-btn" onclick="login()">
+            Login
+          </button>
+          <button type="button" class="toggle-btn" onclick="signup()">
+            Signup
+          </button>
+        </div>
+        <form class="input-group" id="login">
+          <select class="input-field form-control" name="role" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="4">Doctor</option>
+            <option value="5">Receptionist</option>
+            <option value="2">Admin</option>
+          </select>
+          <input
+            type="email"
+            class="input-field"
+            placeholder="Email"
+            name="email"
+            required/>
+          <input
+            type="password"
+            class="input-field"
+            placeholder="Enter Password"
+            name="password"
+            required/>
+          <button id="login-btn" type="submit" class="submit-btn">Login</button>
+        </form>
+        <form class="input-group" id="signup">
+          <input
+            type="text"
+            class="input-field"
+            placeholder="Name"
+            name="name"
+            required/>
+          <select class="input-field form-control" name="role" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="4">Doctor</option>
+            <option value="5">Receptionist</option>
+            <option value="2">Admin</option>
+          </select>
+          <input
+            type="email"
+            class="input-field"
+            placeholder="Email"
+            name="email"
+            required/>
+          <input
+            type="password"
+            class="input-field"
+            placeholder="Enter Password"
+            name="password"
+            required/>
+          <input
+            type="password"
+            class="input-field"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            required/>
+          <button type="submit" id="signup-btn" class="submit-btn">Signup</button>
+        </form>
+        
+      </div>
+      <button onclick="window.location.href='index.html'" class="back-to-home">Back to Home</button>
+    </div>
+
+    <script src="scripts/js/login.js"></script>
+    <script src="scripts/js/userData.js"></script>
+  </body>
+</html>

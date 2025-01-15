@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Medical Scheduler</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/home.css">
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener("click", function(e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute("href")).scrollIntoView({
+      behavior: "smooth"
+    });
+  });
+});
+
+  </script>
+</head>
+<body>
+  <header class="bg-primary text-white">
+    <div class="container d-flex justify-content-between align-items-center gradient-background py-3">
+      <h1 class="mb-0">Medical Scheduler</h1>
+      <a href="signup.html" class="btn btn-light">Login/Signup</a>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-5">
+    <section class="contact">
+      <h2 class="text-center mb-4">Contact Us</h2>
+      <p class="lead text-center">If you have any questions or feedback about Medical Scheduler, feel free to reach out to us. We’d love to hear from you!</p>
+
+      <div class="row my-4">
+        <div class="col-md-6">
+          <h3>Get in Touch</h3>
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Email:</strong> support@medicalscheduler.com</li>
+            <li class="list-group-item"><strong>Phone:</strong> +251912345678</li>
+            <li class="list-group-item"><strong>Address:</strong> 5 kilo, Addis Ababa, Ethiopia</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h3>Contact Form</h3>
+          <form action="submit_form.php" method="post" class="p-3 border rounded">
+            <div class="mb-3">
+              <label for="name" class="form-label">Your Name:</label>
+              <input type="text" id="name" name="name" class="form-control" required placeholder="Enter your full name">
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Your Email:</label>
+              <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email address">
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Your Message:</label>
+              <textarea id="message" name="message" rows="5" class="form-control" required placeholder="Write your message here"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <h3>Follow Us</h3>
+        <p>Stay updated by following us on social media:</p>
+        <a href="#" class="btn btn-outline-primary me-2">Facebook</a>
+        <a href="#" class="btn btn-outline-info me-2">Twitter</a>
+        <a href="#" class="btn btn-outline-primary">LinkedIn</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <p>© 2025 Medical Scheduler. All Rights Reserved.</p>
+  </footer>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/effects.js"></script>
+</body>
+</html>
