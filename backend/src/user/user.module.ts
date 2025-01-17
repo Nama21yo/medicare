@@ -7,6 +7,9 @@ import { RolesModule } from 'src/roles/roles.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Token } from './token.entity';
 import { TokenService } from './token.service';
+import { BranchModule } from 'src/branch/branch.module';
+import { DoctorModule } from 'src/doctor/doctor.module';
+import { ReceptionistModule } from 'src/receptionist/receptionist.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { TokenService } from './token.service';
       secret: 'secret', // Use an environment variable in production
       signOptions: { expiresIn: '1w' },
     }),
+    BranchModule, // Add BranchModule here
+    DoctorModule, // Add DoctorModule for DoctorService
+    ReceptionistModule, // Add ReceptionistModule for ReceptionistService
   ],
   controllers: [UserController],
   providers: [UserService, TokenService],

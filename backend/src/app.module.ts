@@ -9,6 +9,11 @@ import { TokenService } from './user/token.service';
 import { Token } from './user/token.entity';
 import { PatientModule } from './patient/patient.module';
 import { QueueModule } from './queue/queue.module';
+import { HeadOfficeModule } from './head-office/head-office.module';
+import { BranchModule } from './branch/branch.module';
+import { DiagnosisModule } from './diagnosis/diagnosis.module';
+import { ReceptionistModule } from './receptionist/receptionist.module';
+import { DoctorModule } from './doctor/doctor.module';
 
 @Module({
   imports: [
@@ -35,6 +40,11 @@ import { QueueModule } from './queue/queue.module';
     UserModule,
     PatientModule,
     QueueModule,
+    HeadOfficeModule,
+    BranchModule,
+    DiagnosisModule,
+    ReceptionistModule,
+    DoctorModule,
   ],
   controllers: [AppController],
   providers: [AppService, TokenService],

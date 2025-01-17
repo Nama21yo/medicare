@@ -6,6 +6,7 @@ import { Role } from 'src/roles/roles.entity';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { hash } from 'bcryptjs';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -69,6 +70,17 @@ export class UserService {
       role,
     });
     return this.userRepository.save(user);
+  }
+
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.findByEmail(email);
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new NotFoundException('Invalid email or password');
+    }
+
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {

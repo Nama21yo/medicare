@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 const allowedRoleNames = [
-  'Patient',
-  'HeadOffice',
-  'Branch',
-  'Doctor',
-  'Receptionist',
+  'patient',
+  'headoffice',
+  'branch',
+  'doctor',
+  'receptionist',
 ];
 
 @Entity('roles')

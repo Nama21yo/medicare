@@ -1,9 +1,12 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto } from './dto/createPatient.dto';
 import { Patient } from './patient.entity';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { Roles } from 'src/roles/decorator/roles.decorator';
 
 @Controller('v1/patients')
+@UseGuards(RolesGuard)
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
@@ -14,6 +17,7 @@ export class PatientController {
    * @returns The created Patient object
    */
   @Post()
+  @Roles('receptionist', 'branch', 'headoffice')
   async register(@Body() createPatientDto: CreatePatientDto): Promise<Patient> {
     return this.patientService.register(createPatientDto);
   }
