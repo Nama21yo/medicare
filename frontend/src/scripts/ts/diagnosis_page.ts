@@ -162,7 +162,7 @@ function renderDiagnosis(diagnoses: Diagnosis[]): void {
   diagnosisTableBody.innerHTML = "";
   console.log("Diagnoses to render:", diagnoses); // Debugging line
   diagnoses.forEach((diagnosis, index) => {
-    if (diagnosis.visible) {
+    // if (diagnosis.visible === true) {
       const row = `<tr>
                 <td>${diagnosis.diagnosisName}</td>
                 <td>${diagnosis.doctor.name}</td>
@@ -172,7 +172,7 @@ function renderDiagnosis(diagnoses: Diagnosis[]): void {
                 </td>
             </tr>`;
       diagnosisTableBody.innerHTML += row;
-    }
+    // }
   });
   updateCounters();
 }

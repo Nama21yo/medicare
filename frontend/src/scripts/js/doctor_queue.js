@@ -96,15 +96,28 @@ function renderUsers(users) {
     updateCounters();
 }
 //View record history
+// const viewRecordHistory = async (index: number): Promise<void> => {
+//   const Current_patient = users[index];
+//   const patientId = Current_patient.patient.patient_id;
+//   // const Current_doctor = users[index];
+//   // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
+//   const redirectUrl = `diagnosis_page.html?patient_id=${encodeURIComponent(patientId)}`;
+//   // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
+//    // Assuming 'patient_id' is a property of the patient object
+//   // Redirect to the diagnosis_page.html with the patient_id as a query parameter
+//   window.location.href = redirectUrl;
+// };
 var viewRecordHistory = function (index) { return __awaiter(_this, void 0, void 0, function () {
-    var Current_patient, patientId, redirectUrl;
+    var Current_patient, patientId, form, patientIdInput;
     return __generator(this, function (_a) {
         Current_patient = users[index];
         patientId = Current_patient.patient.patient_id;
-        redirectUrl = "diagnosis_page.html?patientId=".concat(encodeURIComponent(patientId));
-        // Assuming 'patient_id' is a property of the patient object
-        // Redirect to the diagnosis_page.html with the patient_id as a query parameter
-        window.location.href = redirectUrl;
+        form = document.getElementById('viewRecordHistoryForm');
+        patientIdInput = document.getElementById('patientIdInput');
+        // Set the patient_id input value
+        patientIdInput.value = patientId.toString();
+        // Submit the form
+        form.submit();
         return [2 /*return*/];
     });
 }); };
