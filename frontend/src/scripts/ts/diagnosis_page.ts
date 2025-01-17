@@ -27,7 +27,7 @@ interface Patient {
 let patients: Patient[] = [];
 let totalDiagnoses: number = 0;
 let diagnosis: Diagnosis[] = [];
-let currentPatient: Patient | null = null;
+let currentPatient: Patient;
 
 document.addEventListener("DOMContentLoaded", () => {
   // Function to get query parameters from the URL
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data: Patient[] = await response.json();
       patients = data;
 
-      currentPatient: Patient = patients.filter(
+      currentPatient = patients.filter(
         (patient) => patient.patient_id.toString() === patientId
       )[0];
       fetchDiagnosis(currentPatient);
