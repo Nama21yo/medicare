@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         return current_diagnosis.patient.patient_id === currentPatient.patient_id;
                     });
                     totalDiagnoses = currentDiagnosis.filter(function (d) { return d.visible; }).length;
-                    renderDiagnoses(currentDiagnosis);
+                    renderDiagnosis(currentDiagnosis);
                     return [3 /*break*/, 4];
                 case 3:
                     error_2 = _a.sent();
@@ -110,21 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initial rendering of diagnoses
     fetchPaitient();
 });
-// Assuming `currentPatient` is defined and accessible in this scope
-// const currentPatient: Patient = {
-//   // Add your sample patient data here or make sure it's assigned correctly elsewhere
-//   patient_id: 1,
-//   first_name: 'John',
-//   last_name: 'Doe',
-//   email: 'john.doe@example.com',
-//   phone_number: '123-456-7890',
-//   date_of_birth: '1990-01-01',
-//   gender: 'male',
-//   registered_by: 'admin',
-//   address: '123 Main St',
-//   created_at: '2025-01-01T00:00:00.000Z',
-//   updated_at: '2025-01-01T00:00:00.000Z'
-// };
 // Function to add a diagnosis
 var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, function () {
     var token, base64Payload, payload, doctorId, diagnosisName, diagnosisDetails, prescription, diagnosisData, diagnosisResponse, newDiagnosis, error_3;
@@ -176,7 +161,7 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
                 updateCounters();
                 // Assuming `diagnosis` is an array that holds all diagnoses
                 diagnosis.push(newDiagnosis);
-                renderDiagnoses(diagnosis); // Update UI with new diagnosis
+                renderDiagnosis(diagnosis); // Update UI with new diagnosis
                 closeAddDiagnosisModal(); // Close the modal after successful submission
                 return [3 /*break*/, 5];
             case 4:
@@ -187,13 +172,11 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
         }
     });
 }); };
-// // Assuming an existing form submission event listener
-// const form = document.getElementById('addDiagnosisForm') as HTMLFormElement;
-// form.addEventListener('submit', addDiagnosis);
 // Renders the diagnosis table
-function renderDiagnoses(diagnoses) {
+function renderDiagnosis(diagnoses) {
     var diagnosisTableBody = document.getElementById("diagnosisTableBody");
     diagnosisTableBody.innerHTML = "";
+    console.log("Diagnoses to render:", diagnoses); // Debugging line
     diagnoses.forEach(function (diagnosis, index) {
         if (diagnosis.visible) {
             var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctor.name, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
@@ -231,7 +214,7 @@ function filterDiagnoses() {
             diagnosis.doctor.name.toLowerCase().includes(searchValue) ||
             diagnosis.created_at.toLowerCase().includes(searchValue);
     });
-    renderDiagnoses(filteredDiagnoses);
+    renderDiagnosis(filteredDiagnoses);
 }
 // Updates the counters for total diagnoses
 function updateCounters() {
