@@ -38,7 +38,7 @@ var _this = this;
 var patients = [];
 var totalDiagnoses = 0;
 var diagnosis = [];
-var currentPatient = null;
+var currentPatient;
 document.addEventListener("DOMContentLoaded", function () {
     // Function to get query parameters from the URL
     function getQueryParams() {
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 case 2:
                     data = _a.sent();
                     patients = data;
-                    currentPatient: Patient = patients.filter(function (patient) { return patient.patient_id.toString() === patientId; })[0];
+                    currentPatient = patients.filter(function (patient) { return patient.patient_id.toString() === patientId; })[0];
                     fetchDiagnosis(currentPatient);
                     return [3 /*break*/, 4];
                 case 3:
