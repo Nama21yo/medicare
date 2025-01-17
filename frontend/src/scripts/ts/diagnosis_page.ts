@@ -1,8 +1,8 @@
 interface Diagnosis {
+  diagnosis_details: string;
+  diagnosis_name: string;
   diagnosis_id: number;
-  diagnosisName: string;
   prescription: string;
-  comment: string;
   patient: Patient;
   doctor: User;
   visible: boolean;
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Patient ID from URL:", patientId); // Debugging line
 
-  const fetchPaitient = async (): Promise<void> => {
+  const fetchPatient = async (): Promise<void> => {
     try {
       const response = await fetch("http://localhost:4000/api/v1/patients");
       const data: Patient[] = await response.json();
@@ -81,8 +81,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Function to render basic patient information
+  function showBasicPatientInfo(): void {
+    const patientInfoDiv = document.getElementById("basic_patient_info");
+
+    if (!patientInfoDiv) {
+      console.error("Patient info container not found");
+      return;
+    }
+
+    // Ensure `currentPatient` is defined
+    if (!currentPatient) {
+      console.error("Current patient data not available");
+      return;
+    }
+
+    // Calculate the age of the patient
+    const birthDate = new Date(currentPatient.date_of_birth);
+    const today = new Date();
+    let age: number = today.getFullYear() - birthDate.getFullYear();
+
+    // Populate the patient information
+    patientInfoDiv.innerHTML = `
+    <p class="card-text">Name: ${currentPatient.first_name} ${currentPatient.last_name}</p>
+    <p class="card-text">Age: ${age}</p>
+    <p class="card-text">Address: ${currentPatient.address}</p>
+    <p class="card-text">Phone: ${currentPatient.phone_number}</p>
+  `;
+  }
+
   // Initial rendering of diagnoses
-  fetchPaitient();
+  fetchPatient().then(() => {
+    showBasicPatientInfo();
+  });
 });
 
 // Function to add a diagnosis
@@ -154,12 +185,9 @@ const addDiagnosis = async (event: Event): Promise<void> => {
   }
 };
 
-
 // Renders the diagnosis table
 function renderDiagnosis(diagnoses: Diagnosis[]): void {
-  const diagnosisTableBody = document.getElementById(
-    "diagnosisTableBody"
-  );
+  const diagnosisTableBody = document.getElementById("diagnosisTableBody");
   if (!diagnosisTableBody) {
     console.error("Diagnosis table body element not found");
     return;
@@ -167,11 +195,11 @@ function renderDiagnosis(diagnoses: Diagnosis[]): void {
   diagnosisTableBody.innerHTML = "";
   console.log("Diagnoses to render:", diagnoses); // Debugging line
   diagnoses.forEach((diag, index) => {
-    if (diag.visible === true) {
+    if (diag.visible) {
       const row = `<tr>
-                <td>${diag.diagnosisName}</td>
-                <td>${diag.doctor.name}</td>
-                <td>${diag.created_at}</td>
+                <td>${diag.diagnosis_name}</td>
+                <td>${diag.doctor.username}</td>
+                <td>${new Date(diag.created_at).toLocaleDateString()}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="viewDiagnosis(${index})">View Details</button>
                 </td>
@@ -186,15 +214,16 @@ function renderDiagnosis(diagnoses: Diagnosis[]): void {
 function viewDiagnosis(index: number): void {
   const diag = diagnosis[index];
   (document.getElementById("viewDiagnosisName") as HTMLInputElement).value =
-  diag.diagnosisName;
+    diag.diagnosis_name;
   (document.getElementById("viewDoctorName") as HTMLInputElement).value =
-  diag.doctor.name;
-  (document.getElementById("viewDate") as HTMLInputElement).value =
-  diag.created_at;
+    diag.doctor.username;
+  (document.getElementById("viewDate") as HTMLInputElement).value = new Date(
+    diag.created_at
+  ).toLocaleDateString();
   (document.getElementById("viewPrescription") as HTMLTextAreaElement).value =
-  diag.prescription;
+    diag.prescription;
   (document.getElementById("viewComment") as HTMLTextAreaElement).value =
-  diag.comment;
+    diag.diagnosis_details;
   (document.getElementById("viewDiagnosisModal") as HTMLElement).style.display =
     "block";
 }

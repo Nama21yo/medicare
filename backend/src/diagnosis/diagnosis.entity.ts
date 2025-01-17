@@ -33,7 +33,7 @@ export class Diagnosis {
   doctor: User;
 
   @Column({ default: true }) // Whether the diagnosis has been resolved
-  visisble: boolean;
+  visible: boolean;
   // visible
 
   @CreateDateColumn()

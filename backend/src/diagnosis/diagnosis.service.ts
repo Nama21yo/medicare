@@ -68,7 +68,7 @@ export class DiagnosisService {
     if (dto.diagnosis_details)
       diagnosis.diagnosis_details = dto.diagnosis_details;
     if (dto.prescription) diagnosis.prescription = dto.prescription;
-    if (dto.visible !== undefined) diagnosis.visisble = dto.visible;
+    if (dto.visible !== undefined) diagnosis.visible = dto.visible;
 
     return this.diagnosisRepository.save(diagnosis);
   }

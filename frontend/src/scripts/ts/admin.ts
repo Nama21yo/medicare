@@ -1,6 +1,7 @@
 // Check for JWT token on load
 const checkJwtToken = (): void => {
-  const jwtToken = localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
+  const jwtToken =
+    localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
   if (!jwtToken) {
     window.location.href = "http://127.0.0.1:5500/frontend/src/index.html";
   }
@@ -10,6 +11,7 @@ const checkJwtToken = (): void => {
 checkJwtToken();
 // Define User interface
 interface User {
+  username: string;
   user_id: number;
   name: string;
   email: string;
@@ -28,12 +30,10 @@ const fetchEmployeesData = async (): Promise<void> => {
     const response = await fetch("http://localhost:4000/api/v1/users");
     const users: User[] = await response.json();
 
-
     // Filter users to show only Receptionists and Doctors
     employees = users.filter(
       (user) => user.role.name === "Receptionist" || user.role.name === "Doctor"
     );
-
 
     // Update the counters based on the fetched users
     totalDoctors = employees.filter(
@@ -42,7 +42,6 @@ const fetchEmployeesData = async (): Promise<void> => {
     totalReceptionists = employees.filter(
       (user) => user.role.name === "Receptionist"
     ).length;
-
 
     // Render the filtered employees
     renderEmployees(employees);
@@ -53,7 +52,9 @@ const fetchEmployeesData = async (): Promise<void> => {
 
 // Render employees
 const renderEmployees = (employees: User[]): void => {
-  const userTableBody = document.getElementById("userTableBody") as HTMLTableSectionElement;
+  const userTableBody = document.getElementById(
+    "userTableBody"
+  ) as HTMLTableSectionElement;
   userTableBody.innerHTML = "";
 
   employees.forEach((user, index) => {
@@ -70,15 +71,11 @@ const renderEmployees = (employees: User[]): void => {
     userTableBody.innerHTML += row;
   });
 
-
   updateEmployeeCounters();
 };
 
-
-
 // Delete User
 const deleteEmployee = async (index: number): Promise<void> => {
-
   const userToBeDeleted = employees[index];
 
   if (!userToBeDeleted) {
@@ -86,9 +83,12 @@ const deleteEmployee = async (index: number): Promise<void> => {
   }
 
   try {
-    const response = await fetch(`http://localhost:4000/api/v1/users/${userToBeDeleted.user_id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `http://localhost:4000/api/v1/users/${userToBeDeleted.user_id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Failed to delete user: ${response.statusText}`);
@@ -119,7 +119,7 @@ function filterEmployees(): void {
       user.email.toLowerCase().startsWith(searchValue) ||
       user.role.name.toLowerCase().startsWith(searchValue)
   );
-  
+
   renderEmployees(filteredUsers);
 }
 

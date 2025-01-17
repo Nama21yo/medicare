@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var queryParams = getQueryParams();
     var patientId = queryParams["patient_id"];
     console.log("Patient ID from URL:", patientId); // Debugging line
-    var fetchPaitient = function () { return __awaiter(_this, void 0, void 0, function () {
+    var fetchPatient = function () { return __awaiter(_this, void 0, void 0, function () {
         var response, data, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -107,8 +107,29 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }); };
+    // Function to render basic patient information
+    function showBasicPatientInfo() {
+        var patientInfoDiv = document.getElementById("basic_patient_info");
+        if (!patientInfoDiv) {
+            console.error("Patient info container not found");
+            return;
+        }
+        // Ensure `currentPatient` is defined
+        if (!currentPatient) {
+            console.error("Current patient data not available");
+            return;
+        }
+        // Calculate the age of the patient
+        var birthDate = new Date(currentPatient.date_of_birth);
+        var today = new Date();
+        var age = today.getFullYear() - birthDate.getFullYear();
+        // Populate the patient information
+        patientInfoDiv.innerHTML = "\n    <p class=\"card-text\">Name: ".concat(currentPatient.first_name, " ").concat(currentPatient.last_name, "</p>\n    <p class=\"card-text\">Age: ").concat(age, "</p>\n    <p class=\"card-text\">Address: ").concat(currentPatient.address, "</p>\n    <p class=\"card-text\">Phone: ").concat(currentPatient.phone_number, "</p>\n  ");
+    }
     // Initial rendering of diagnoses
-    fetchPaitient();
+    fetchPatient().then(function () {
+        showBasicPatientInfo();
+    });
 });
 // Function to add a diagnosis
 var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, function () {
@@ -182,8 +203,8 @@ function renderDiagnosis(diagnoses) {
     diagnosisTableBody.innerHTML = "";
     console.log("Diagnoses to render:", diagnoses); // Debugging line
     diagnoses.forEach(function (diag, index) {
-        if (diag.visible === true) {
-            var row = "<tr>\n                <td>".concat(diag.diagnosisName, "</td>\n                <td>").concat(diag.doctor.name, "</td>\n                <td>").concat(diag.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
+        if (diag.visible) {
+            var row = "<tr>\n                <td>".concat(diag.diagnosis_name, "</td>\n                <td>").concat(diag.doctor.username, "</td>\n                <td>").concat(new Date(diag.created_at).toLocaleDateString(), "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
             diagnosisTableBody.innerHTML += row;
         }
     });
@@ -193,15 +214,14 @@ function renderDiagnosis(diagnoses) {
 function viewDiagnosis(index) {
     var diag = diagnosis[index];
     document.getElementById("viewDiagnosisName").value =
-        diag.diagnosisName;
+        diag.diagnosis_name;
     document.getElementById("viewDoctorName").value =
-        diag.doctor.name;
-    document.getElementById("viewDate").value =
-        diag.created_at;
+        diag.doctor.username;
+    document.getElementById("viewDate").value = new Date(diag.created_at).toLocaleDateString();
     document.getElementById("viewPrescription").value =
         diag.prescription;
     document.getElementById("viewComment").value =
-        diag.comment;
+        diag.diagnosis_details;
     document.getElementById("viewDiagnosisModal").style.display =
         "block";
 }
