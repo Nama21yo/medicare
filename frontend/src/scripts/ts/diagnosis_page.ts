@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
           diagnosis = data;
 
           const currentDiagnosis = diagnosis.filter((current_diagnosis) => current_diagnosis.patient.patient_id === currentPatient.patient_id);
-
+          totalDiagnoses = currentDiagnosis.filter((d) => d.visible ).length;
           renderDiagnoses(currentDiagnosis);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -91,13 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Sample data
-const diagnoses: Diagnosis[] = [
-    { diagnosisName: "Flu", doctorName: "Dr. John Doe", date: "2025-01-01", prescription: "advil", comment: "Rest and drink plenty of fluids", visible: true, },
-    { diagnosisName: "Diabetes", doctorName: "Dr. Jane Smith", date: "2025-02-15", prescription: "insuline", comment: "Manage diet and exercise regularly", visible: false},
-    // Add more sample diagnoses as needed
-];
+// const diagnoses: Diagnosis[] = [
+//     { diagnosisName: "Flu", doctorName: "Dr. John Doe", date: "2025-01-01", prescription: "advil", comment: "Rest and drink plenty of fluids", visible: true, },
+//     { diagnosisName: "Diabetes", doctorName: "Dr. Jane Smith", date: "2025-02-15", prescription: "insuline", comment: "Manage diet and exercise regularly", visible: false},
+//     // Add more sample diagnoses as needed
+// ];
 
-let totalDiagnoses: number = diagnoses.filter((d) => d.visible ).length;
+// let totalDiagnoses: number =
 
 // Renders the diagnosis table
 function renderDiagnoses(diagnoses: Diagnosis[]): void {
@@ -107,8 +107,8 @@ function renderDiagnoses(diagnoses: Diagnosis[]): void {
         if (diagnosis.visible) {
             const row = `<tr>
                 <td>${diagnosis.diagnosisName}</td>
-                <td>${diagnosis.doctorName}</td>
-                <td>${diagnosis.date}</td>
+                <td>${diagnosis.doctor.name}</td>
+                <td>${diagnosis.created_at}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="viewDiagnosis(${index})">View Details</button>
                 </td>
@@ -124,8 +124,8 @@ function renderDiagnoses(diagnoses: Diagnosis[]): void {
 function viewDiagnosis(index: number): void {
     const diagnosis = diagnoses[index];
     (document.getElementById('viewDiagnosisName') as HTMLInputElement).value = diagnosis.diagnosisName;
-    (document.getElementById('viewDoctorName') as HTMLInputElement).value = diagnosis.doctorName;
-    (document.getElementById('viewDate') as HTMLInputElement).value = diagnosis.date;
+    (document.getElementById('viewDoctorName') as HTMLInputElement).value = diagnosis.doctor.name;
+    (document.getElementById('viewDate') as HTMLInputElement).value = diagnosis.created_at;
     (document.getElementById('viewPrescription') as HTMLTextAreaElement).value = diagnosis.prescription;
     (document.getElementById('viewComment') as HTMLTextAreaElement).value = diagnosis.comment;
     (document.getElementById('viewDiagnosisModal') as HTMLElement).style.display = 'block';
@@ -141,8 +141,8 @@ function filterDiagnoses(): void {
     const searchValue = (document.getElementById('searchInput') as HTMLInputElement).value.toLowerCase();
     const filteredDiagnoses = diagnoses.filter(diagnosis => 
         diagnosis.diagnosisName.toLowerCase().includes(searchValue) ||
-        diagnosis.doctorName.toLowerCase().includes(searchValue) ||
-        diagnosis.date.toLowerCase().includes(searchValue)
+        diagnosis.doctor.name.toLowerCase().includes(searchValue) ||
+        diagnosis.created_at.toLowerCase().includes(searchValue)
     );
     renderDiagnoses(filteredDiagnoses);
 }
@@ -161,32 +161,32 @@ function closeAddDiagnosisModal(): void {
     (document.getElementById('addDiagnosisModal') as HTMLElement).style.display = 'none';
 }
 
-function addDiagnosis(event: Event): void {
-    event.preventDefault();
-    const diagnosisName = (document.getElementById('diagnosisName') as HTMLInputElement).value;
-    const doctorName = "Dr. Placeholder"; // This should be fetched from the current logged-in doctor
-    const date = new Date().toISOString().split('T')[0]; // Current date
-    const prescription = (document.getElementById('diagnosisPrescription') as HTMLTextAreaElement).value;
-    const comment = (document.getElementById('diagnosisComment') as HTMLTextAreaElement).value;
-    const visible = true;
+// function addDiagnosis(event: Event): void {
+//     event.preventDefault();
+//     const diagnosisName = (document.getElementById('diagnosisName') as HTMLInputElement).value;
+//     const doctorName = "Dr. Placeholder"; // This should be fetched from the current logged-in doctor
+//     const date = new Date().toISOString().split('T')[0]; // Current date
+//     const prescription = (document.getElementById('diagnosisPrescription') as HTMLTextAreaElement).value;
+//     const comment = (document.getElementById('diagnosisComment') as HTMLTextAreaElement).value;
+//     const visible = true;
 
-    const newDiagnosis: Diagnosis = {
-        diagnosisName,
-        doctorName,
-        date,
-        prescription,
-        visible,
-        comment
-    };
+//     const newDiagnosis: Diagnosis = {
+//         diagnosisName,
+//         doctorName,
+//         date,
+//         prescription,
+//         visible,
+//         comment
+//     };
     
-    diagnoses.push(newDiagnosis);
-    totalDiagnoses++;
-    renderDiagnoses(diagnoses);
-    closeAddDiagnosisModal();
-}
+//     diagnoses.push(newDiagnosis);
+//     totalDiagnoses++;
+//     renderDiagnoses(diagnoses);
+//     closeAddDiagnosisModal();
+// }
 
 
 // Initial rendering of diagnoses
-document.addEventListener('DOMContentLoaded', () => {
-    renderDiagnoses(diagnoses);
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     renderDiagnoses(diagnoses);
+// });
