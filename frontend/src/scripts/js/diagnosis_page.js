@@ -110,8 +110,24 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initial rendering of diagnoses
     fetchPaitient();
 });
+// Assuming `currentPatient` is defined and accessible in this scope
+// const currentPatient: Patient = {
+//   // Add your sample patient data here or make sure it's assigned correctly elsewhere
+//   patient_id: 1,
+//   first_name: 'John',
+//   last_name: 'Doe',
+//   email: 'john.doe@example.com',
+//   phone_number: '123-456-7890',
+//   date_of_birth: '1990-01-01',
+//   gender: 'male',
+//   registered_by: 'admin',
+//   address: '123 Main St',
+//   created_at: '2025-01-01T00:00:00.000Z',
+//   updated_at: '2025-01-01T00:00:00.000Z'
+// };
+// Function to add a diagnosis
 var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, function () {
-    var token, base64Payload, payload, doctorId, diagnosisName, diagnosisDetails, prescription, diagnosisData, diagnosisResponse, diagnosis_1, error_3;
+    var token, base64Payload, payload, doctorId, diagnosisName, diagnosisDetails, prescription, diagnosisData, diagnosisResponse, newDiagnosis, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -131,7 +147,7 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
                     diagnosis_name: diagnosisName,
                     diagnosis_details: diagnosisDetails || undefined, // Optional field
                     prescription: prescription || undefined, // Optional field
-                    patient_id: currentPatient === null || currentPatient === void 0 ? void 0 : currentPatient.patient_id,
+                    patient_id: currentPatient.patient_id,
                     doctor_id: doctorId,
                     visible: true,
                 };
@@ -153,12 +169,14 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
                 }
                 return [4 /*yield*/, diagnosisResponse.json()];
             case 3:
-                diagnosis_1 = _a.sent();
-                console.log("Diagnosis added successfully:", diagnosis_1);
+                newDiagnosis = _a.sent();
+                console.log("Diagnosis added successfully:", newDiagnosis);
                 // Update the counter (if applicable) and UI
                 totalDiagnoses++;
                 updateCounters();
-                renderDiagnoses(diagnosis_1); // Assuming this function renders diagnoses to the UI
+                // Assuming `diagnosis` is an array that holds all diagnoses
+                diagnosis.push(newDiagnosis);
+                renderDiagnoses(diagnosis); // Update UI with new diagnosis
                 closeAddDiagnosisModal(); // Close the modal after successful submission
                 return [3 /*break*/, 5];
             case 4:
@@ -169,6 +187,9 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
         }
     });
 }); };
+// // Assuming an existing form submission event listener
+// const form = document.getElementById('addDiagnosisForm') as HTMLFormElement;
+// form.addEventListener('submit', addDiagnosis);
 // Renders the diagnosis table
 function renderDiagnoses(diagnoses) {
     var diagnosisTableBody = document.getElementById("diagnosisTableBody");
