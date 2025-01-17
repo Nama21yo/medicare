@@ -174,11 +174,19 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
 }); };
 // Renders the diagnosis table
 function renderDiagnosis(diagnoses) {
-    var diagnosisTableBody = document.getElementById('diagnosisTableBody');
-    diagnosisTableBody.innerHTML = '';
+    var diagnosisTableBody = document.getElementById("diagnosisTableBody");
+    if (!diagnosisTableBody) {
+        console.error("Diagnosis table body element not found");
+        return;
+    }
+    diagnosisTableBody.innerHTML = "";
+    console.log("Diagnoses to render:", diagnoses); // Debugging line
     diagnoses.forEach(function (diagnosis, index) {
-        var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctor.name, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    ").concat(diagnosis.visible === true ? "Visible" : "Not Visible", "\n                </td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"isVisible(").concat(index, ")\">\n                    \n                    ").concat(diagnosis.visible === false ? "Visible" : "Not Visible", "</button>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                    </td>\n            </tr>");
-        diagnosisTableBody.innerHTML += row;
+        if (diagnosis.visible === true) {
+            var doctorName = diagnosis.doctor ? diagnosis.doctor.name : "Unknown";
+            var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(doctorName, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
+            diagnosisTableBody.innerHTML += row;
+        }
     });
     updateCounters();
 }
