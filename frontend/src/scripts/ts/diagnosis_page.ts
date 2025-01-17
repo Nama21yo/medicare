@@ -84,75 +84,95 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial rendering of diagnoses
   fetchPaitient();
 });
+// Assuming `currentPatient` is defined and accessible in this scope
+// const currentPatient: Patient = {
+//   // Add your sample patient data here or make sure it's assigned correctly elsewhere
+//   patient_id: 1,
+//   first_name: 'John',
+//   last_name: 'Doe',
+//   email: 'john.doe@example.com',
+//   phone_number: '123-456-7890',
+//   date_of_birth: '1990-01-01',
+//   gender: 'male',
+//   registered_by: 'admin',
+//   address: '123 Main St',
+//   created_at: '2025-01-01T00:00:00.000Z',
+//   updated_at: '2025-01-01T00:00:00.000Z'
+// };
+
+// Function to add a diagnosis
 const addDiagnosis = async (event: Event): Promise<void> => {
-  event.preventDefault();
+event.preventDefault();
 
-  const token = localStorage.getItem("jwtToken");
-  if (!token) {
-    console.error("No token found in local storage");
-    return;
-  }
+const token = localStorage.getItem("jwtToken");
+if (!token) {
+  console.error("No token found in local storage");
+  return;
+}
 
-  const base64Payload = token.split(".")[1];
-  const payload = JSON.parse(atob(base64Payload));
-  const doctorId = payload.user_id;
-  //     const diagnosisName = (document.getElementById('diagnosisName') as HTMLInputElement).value;
-  //     const doctorName = "Dr. Placeholder"; // This should be fetched from the current logged-in doctor
-  //     const date = new Date().toISOString().split('T')[0]; // Current date
-  //     const prescription = (document.getElementById('diagnosisPrescription') as HTMLTextAreaElement).value;
-  //     const comment = (document.getElementById('diagnosisComment') as HTMLTextAreaElement).value;
+const base64Payload = token.split(".")[1];
+const payload = JSON.parse(atob(base64Payload));
+const doctorId = payload.user_id;
 
-  // Fetch input values from the form
-  const diagnosisName = (
-    document.getElementById("diagnosisName") as HTMLInputElement
-  ).value;
-  const diagnosisDetails = (
-    document.getElementById("diagnosisComment") as HTMLInputElement
-  ).value;
-  const prescription = (
-    document.getElementById("diagnosisPrescription") as HTMLInputElement
-  ).value;
+// Fetch input values from the form
+const diagnosisName = (
+  document.getElementById("diagnosisName") as HTMLInputElement
+).value;
+const diagnosisDetails = (
+  document.getElementById("diagnosisComment") as HTMLInputElement
+).value;
+const prescription = (
+  document.getElementById("diagnosisPrescription") as HTMLInputElement
+).value;
 
-  // Create the diagnosis data object
-  const diagnosisData = {
-    diagnosis_name: diagnosisName,
-    diagnosis_details: diagnosisDetails || undefined, // Optional field
-    prescription: prescription || undefined, // Optional field
-    patient_id: currentPatient?.patient_id,
-    doctor_id: doctorId,
-    visible: true,
-  };
-
-  try {
-    // Send POST request to add diagnosis
-    const diagnosisResponse = await fetch(
-      "http://localhost:4000/api/v1/diagnoses",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(diagnosisData),
-      }
-    );
-
-    if (diagnosisResponse.status !== 201) {
-      throw new Error("Failed to add diagnosis");
-    }
-
-    const diagnosis = await diagnosisResponse.json();
-    console.log("Diagnosis added successfully:", diagnosis);
-
-    // Update the counter (if applicable) and UI
-    totalDiagnoses++;
-    updateCounters();
-    renderDiagnoses(diagnosis); // Assuming this function renders diagnoses to the UI
-    closeAddDiagnosisModal(); // Close the modal after successful submission
-  } catch (error) {
-    console.error("Error adding diagnosis:", error);
-  }
+// Create the diagnosis data object
+const diagnosisData = {
+  diagnosis_name: diagnosisName,
+  diagnosis_details: diagnosisDetails || undefined, // Optional field
+  prescription: prescription || undefined, // Optional field
+  patient_id: currentPatient.patient_id,
+  doctor_id: doctorId,
+  visible: true,
 };
+
+try {
+  // Send POST request to add diagnosis
+  const diagnosisResponse = await fetch(
+    "http://localhost:4000/api/v1/diagnoses",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(diagnosisData),
+    }
+  );
+
+  if (diagnosisResponse.status !== 201) {
+    throw new Error("Failed to add diagnosis");
+  }
+
+  const newDiagnosis = await diagnosisResponse.json();
+  console.log("Diagnosis added successfully:", newDiagnosis);
+
+  // Update the counter (if applicable) and UI
+  totalDiagnoses++;
+  updateCounters();
+
+  // Assuming `diagnosis` is an array that holds all diagnoses
+  diagnosis.push(newDiagnosis);
+  renderDiagnoses(diagnosis); // Update UI with new diagnosis
+  closeAddDiagnosisModal(); // Close the modal after successful submission
+} catch (error) {
+  console.error("Error adding diagnosis:", error);
+}
+};
+
+// // Assuming an existing form submission event listener
+// const form = document.getElementById('addDiagnosisForm') as HTMLFormElement;
+// form.addEventListener('submit', addDiagnosis);
+
 // Renders the diagnosis table
 function renderDiagnoses(diagnoses: Diagnosis[]): void {
   const diagnosisTableBody = document.getElementById(
