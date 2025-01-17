@@ -179,12 +179,47 @@ function renderDiagnosis(diagnoses) {
         console.error("Diagnosis table body element not found");
         return;
     }
+    // Clear existing table content
     diagnosisTableBody.innerHTML = "";
-    console.log("Diagnoses to render:", diagnoses); // Debugging line
+    // If no diagnoses are available, show a message
+    if (diagnoses.length === 0) {
+        var noDataRow = document.createElement("tr");
+        var noDataCell = document.createElement("td");
+        noDataCell.colSpan = 4;
+        noDataCell.textContent = "No diagnoses found.";
+        noDataCell.style.textAlign = "center";
+        noDataRow.appendChild(noDataCell);
+        diagnosisTableBody.appendChild(noDataRow);
+        updateCounters();
+        return;
+    }
+    // Create table rows dynamically
     diagnoses.forEach(function (diag, index) {
-        if (diag.visible === true) {
-            var row = "<tr>\n                <td>".concat(diag.diagnosisName, "</td>\n                <td>").concat(diag.doctor.name, "</td>\n                <td>").concat(diag.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
-            diagnosisTableBody.innerHTML += row;
+        var _a;
+        if (diag.visible) {
+            var row = document.createElement("tr");
+            // Diagnosis Name
+            var nameCell = document.createElement("td");
+            nameCell.textContent = diag.diagnosisName || "N/A";
+            row.appendChild(nameCell);
+            // Doctor Name
+            var doctorCell = document.createElement("td");
+            doctorCell.textContent = ((_a = diag.doctor) === null || _a === void 0 ? void 0 : _a.name) || "Unknown Doctor";
+            row.appendChild(doctorCell);
+            // Creation Date
+            var dateCell = document.createElement("td");
+            dateCell.textContent = diag.created_at || "N/A";
+            row.appendChild(dateCell);
+            // Action Buttons
+            var actionCell = document.createElement("td");
+            var viewButton = document.createElement("button");
+            viewButton.className = "btn btn-primary btn-sm";
+            viewButton.textContent = "View Details";
+            viewButton.addEventListener("click", function () { return viewDiagnosis(index); }); // Bind view functionality
+            actionCell.appendChild(viewButton);
+            row.appendChild(actionCell);
+            // Append the row to the table body
+            diagnosisTableBody.appendChild(row);
         }
     });
     updateCounters();

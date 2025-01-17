@@ -156,30 +156,66 @@ const addDiagnosis = async (event: Event): Promise<void> => {
 
 // Renders the diagnosis table
 function renderDiagnosis(diagnoses: Diagnosis[]): void {
-  const diagnosisTableBody = document.getElementById(
-    "diagnosisTableBody"
-  );
+  const diagnosisTableBody = document.getElementById("diagnosisTableBody");
+  
   if (!diagnosisTableBody) {
     console.error("Diagnosis table body element not found");
     return;
   }
+
+  // Clear existing table content
   diagnosisTableBody.innerHTML = "";
-  console.log("Diagnoses to render:", diagnoses); // Debugging line
+
+  // If no diagnoses are available, show a message
+  if (diagnoses.length === 0) {
+    const noDataRow = document.createElement("tr");
+    const noDataCell = document.createElement("td");
+    noDataCell.colSpan = 4;
+    noDataCell.textContent = "No diagnoses found.";
+    noDataCell.style.textAlign = "center";
+    noDataRow.appendChild(noDataCell);
+    diagnosisTableBody.appendChild(noDataRow);
+    updateCounters();
+    return;
+  }
+
+  // Create table rows dynamically
   diagnoses.forEach((diag, index) => {
-    if (diag.visible === true) {
-      const row = `<tr>
-                <td>${diag.diagnosisName}</td>
-                <td>${diag.doctor.name}</td>
-                <td>${diag.created_at}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" onclick="viewDiagnosis(${index})">View Details</button>
-                </td>
-            </tr>`;
-      diagnosisTableBody.innerHTML += row;
+    if (diag.visible) {
+      const row = document.createElement("tr");
+
+      // Diagnosis Name
+      const nameCell = document.createElement("td");
+      nameCell.textContent = diag.diagnosisName || "N/A";
+      row.appendChild(nameCell);
+
+      // Doctor Name
+      const doctorCell = document.createElement("td");
+      doctorCell.textContent = diag.doctor?.name || "Unknown Doctor";
+      row.appendChild(doctorCell);
+
+      // Creation Date
+      const dateCell = document.createElement("td");
+      dateCell.textContent = diag.created_at || "N/A";
+      row.appendChild(dateCell);
+
+      // Action Buttons
+      const actionCell = document.createElement("td");
+      const viewButton = document.createElement("button");
+      viewButton.className = "btn btn-primary btn-sm";
+      viewButton.textContent = "View Details";
+      viewButton.addEventListener("click", () => viewDiagnosis(index)); // Bind view functionality
+      actionCell.appendChild(viewButton);
+      row.appendChild(actionCell);
+
+      // Append the row to the table body
+      diagnosisTableBody.appendChild(row);
     }
   });
+
   updateCounters();
 }
+
 
 // View a diagnosis (opens modal with details)
 function viewDiagnosis(index: number): void {
