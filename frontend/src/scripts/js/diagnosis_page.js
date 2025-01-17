@@ -38,21 +38,26 @@ var _this = this;
 var patients = [];
 var totalDiagnoses = 0;
 var diagnosis = [];
-document.addEventListener('DOMContentLoaded', function () {
+var currentPatient = null;
+document.addEventListener("DOMContentLoaded", function () {
     // Function to get query parameters from the URL
     function getQueryParams() {
         var params = {};
-        window.location.search.substring(1).split('&').forEach(function (param) {
-            var _a = param.split('='), key = _a[0], value = _a[1];
+        window.location.search
+            .substring(1)
+            .split("&")
+            .forEach(function (param) {
+            var _a = param.split("="), key = _a[0], value = _a[1];
             params[key] = decodeURIComponent(value);
         });
         return params;
     }
     // Get the patient_id from the query parameters
     var queryParams = getQueryParams();
-    var patientId = queryParams['patient_id'];
+    var patientId = queryParams["patient_id"];
+    console.log("Patient ID from URL:", patientId); // Debugging line
     var fetchPaitient = function () { return __awaiter(_this, void 0, void 0, function () {
-        var response, data, currentPatient, error_1;
+        var response, data, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -64,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 2:
                     data = _a.sent();
                     patients = data;
-                    currentPatient = patients.filter(function (patient) { return patient.patient_id.toString() === patientId; })[0];
+                    currentPatient: Patient = patients.filter(function (patient) { return patient.patient_id.toString() === patientId; })[0];
                     fetchDiagnosis(currentPatient);
                     return [3 /*break*/, 4];
                 case 3:
@@ -88,7 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 case 2:
                     data = _a.sent();
                     diagnosis = data;
-                    currentDiagnosis = diagnosis.filter(function (current_diagnosis) { return current_diagnosis.patient.patient_id === currentPatient.patient_id; });
+                    currentDiagnosis = diagnosis.filter(function (current_diagnosis) {
+                        return current_diagnosis.patient.patient_id === currentPatient.patient_id;
+                    });
+                    totalDiagnoses = currentDiagnosis.filter(function (d) { return d.visible; }).length;
                     renderDiagnoses(currentDiagnosis);
                     return [3 /*break*/, 4];
                 case 3:
@@ -99,33 +107,75 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }); };
-    // Fetch and populate patient data based on the patient_id
-    // if (patientId) {
-    //   const patient = users.find(user => user.patient.patient_id.toString() === patientId);
-    //   if (patient) {
-    //     // Populate patient data on the page (adjust as needed)
-    //     document.getElementById('patientName').textContent = patient.name;
-    //     document.getElementById('patientAge').textContent = patient.age.toString();
-    //     // Add other fields as necessary
-    //   }
-    // }
     // Initial rendering of diagnoses
     fetchPaitient();
 });
-// Sample data
-var diagnoses = [
-    { diagnosisName: "Flu", doctorName: "Dr. John Doe", date: "2025-01-01", prescription: "advil", comment: "Rest and drink plenty of fluids", visible: true, },
-    { diagnosisName: "Diabetes", doctorName: "Dr. Jane Smith", date: "2025-02-15", prescription: "insuline", comment: "Manage diet and exercise regularly", visible: false },
-    // Add more sample diagnoses as needed
-];
-var totalDiagnoses = diagnoses.filter(function (d) { return d.visible; }).length;
+var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, function () {
+    var token, base64Payload, payload, doctorId, diagnosisName, diagnosisDetails, prescription, diagnosisData, diagnosisResponse, diagnosis_1, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                event.preventDefault();
+                token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    console.error("No token found in local storage");
+                    return [2 /*return*/];
+                }
+                base64Payload = token.split(".")[1];
+                payload = JSON.parse(atob(base64Payload));
+                doctorId = payload.user_id;
+                diagnosisName = document.getElementById("diagnosisName").value;
+                diagnosisDetails = document.getElementById("diagnosisComment").value;
+                prescription = document.getElementById("diagnosisPrescription").value;
+                diagnosisData = {
+                    diagnosis_name: diagnosisName,
+                    diagnosis_details: diagnosisDetails || undefined, // Optional field
+                    prescription: prescription || undefined, // Optional field
+                    patient_id: currentPatient === null || currentPatient === void 0 ? void 0 : currentPatient.patient_id,
+                    doctor_id: doctorId,
+                    visible: true,
+                };
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/diagnoses", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer ".concat(token),
+                        },
+                        body: JSON.stringify(diagnosisData),
+                    })];
+            case 2:
+                diagnosisResponse = _a.sent();
+                if (diagnosisResponse.status !== 201) {
+                    throw new Error("Failed to add diagnosis");
+                }
+                return [4 /*yield*/, diagnosisResponse.json()];
+            case 3:
+                diagnosis_1 = _a.sent();
+                console.log("Diagnosis added successfully:", diagnosis_1);
+                // Update the counter (if applicable) and UI
+                totalDiagnoses++;
+                updateCounters();
+                renderDiagnoses(); // Assuming this function renders diagnoses to the UI
+                closeAddDiagnosisModal(); // Close the modal after successful submission
+                return [3 /*break*/, 5];
+            case 4:
+                error_3 = _a.sent();
+                console.error("Error adding diagnosis:", error_3);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
 // Renders the diagnosis table
 function renderDiagnoses(diagnoses) {
-    var diagnosisTableBody = document.getElementById('diagnosisTableBody');
-    diagnosisTableBody.innerHTML = '';
+    var diagnosisTableBody = document.getElementById("diagnosisTableBody");
+    diagnosisTableBody.innerHTML = "";
     diagnoses.forEach(function (diagnosis, index) {
         if (diagnosis.visible) {
-            var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctorName, "</td>\n                <td>").concat(diagnosis.date, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
+            var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctor.name, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
             diagnosisTableBody.innerHTML += row;
         }
     });
@@ -133,61 +183,46 @@ function renderDiagnoses(diagnoses) {
 }
 // View a diagnosis (opens modal with details)
 function viewDiagnosis(index) {
-    var diagnosis = diagnoses[index];
-    document.getElementById('viewDiagnosisName').value = diagnosis.diagnosisName;
-    document.getElementById('viewDoctorName').value = diagnosis.doctorName;
-    document.getElementById('viewDate').value = diagnosis.date;
-    document.getElementById('viewPrescription').value = diagnosis.prescription;
-    document.getElementById('viewComment').value = diagnosis.comment;
-    document.getElementById('viewDiagnosisModal').style.display = 'block';
+    var diagnosis = diagnosis[index];
+    document.getElementById("viewDiagnosisName").value =
+        diagnosis.diagnosisName;
+    document.getElementById("viewDoctorName").value =
+        diagnosis.doctor.name;
+    document.getElementById("viewDate").value =
+        diagnosis.created_at;
+    document.getElementById("viewPrescription").value =
+        diagnosis.prescription;
+    document.getElementById("viewComment").value =
+        diagnosis.comment;
+    document.getElementById("viewDiagnosisModal").style.display =
+        "block";
 }
 // Closes the view diagnosis modal
 function closeViewDiagnosisModal() {
-    document.getElementById('viewDiagnosisModal').style.display = 'none';
+    document.getElementById("viewDiagnosisModal").style.display =
+        "none";
 }
 // Implements search functionality
 function filterDiagnoses() {
-    var searchValue = document.getElementById('searchInput').value.toLowerCase();
-    var filteredDiagnoses = diagnoses.filter(function (diagnosis) {
+    var searchValue = document.getElementById("searchInput").value.toLowerCase();
+    var filteredDiagnoses = diagnosis.filter(function (diagnosis) {
         return diagnosis.diagnosisName.toLowerCase().includes(searchValue) ||
-            diagnosis.doctorName.toLowerCase().includes(searchValue) ||
-            diagnosis.date.toLowerCase().includes(searchValue);
+            diagnosis.doctor.name.toLowerCase().includes(searchValue) ||
+            diagnosis.created_at.toLowerCase().includes(searchValue);
     });
     renderDiagnoses(filteredDiagnoses);
 }
 // Updates the counters for total diagnoses
 function updateCounters() {
-    document.getElementById('totalBranches').innerText = totalDiagnoses.toString();
+    document.getElementById("totalBranches").innerText =
+        totalDiagnoses.toString();
 }
 // Modal Functionalities for Adding Diagnosis
 function openAddDiagnosisModal() {
-    document.getElementById('addDiagnosisModal').style.display = 'block';
+    document.getElementById("addDiagnosisModal").style.display =
+        "block";
 }
 function closeAddDiagnosisModal() {
-    document.getElementById('addDiagnosisModal').style.display = 'none';
+    document.getElementById("addDiagnosisModal").style.display =
+        "none";
 }
-function addDiagnosis(event) {
-    event.preventDefault();
-    var diagnosisName = document.getElementById('diagnosisName').value;
-    var doctorName = "Dr. Placeholder"; // This should be fetched from the current logged-in doctor
-    var date = new Date().toISOString().split('T')[0]; // Current date
-    var prescription = document.getElementById('diagnosisPrescription').value;
-    var comment = document.getElementById('diagnosisComment').value;
-    var visible = true;
-    var newDiagnosis = {
-        diagnosisName: diagnosisName,
-        doctorName: doctorName,
-        date: date,
-        prescription: prescription,
-        visible: visible,
-        comment: comment
-    };
-    diagnoses.push(newDiagnosis);
-    totalDiagnoses++;
-    renderDiagnoses(diagnoses);
-    closeAddDiagnosisModal();
-}
-// Initial rendering of diagnoses
-document.addEventListener('DOMContentLoaded', function () {
-    renderDiagnoses(diagnoses);
-});
