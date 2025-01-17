@@ -165,13 +165,12 @@ function renderDiagnosis(diagnoses: Diagnosis[]): void {
   }
   diagnosisTableBody.innerHTML = "";
   console.log("Diagnoses to render:", diagnoses); // Debugging line
-  diagnoses.forEach((diagnosis, index) => {
-    if (diagnosis.visible === true) {
-      const doctorName = diagnosis.doctor ? diagnosis.doctor.name : "Unknown";
+  diagnoses.forEach((diag, index) => {
+    if (diag.visible === true) {
       const row = `<tr>
-                <td>${diagnosis.diagnosisName}</td>
-                <td>${doctorName}</td>
-                <td>${diagnosis.created_at}</td>
+                <td>${diag.diagnosisName}</td>
+                <td>${diag.doctor.name}</td>
+                <td>${diag.created_at}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="viewDiagnosis(${index})">View Details</button>
                 </td>

@@ -181,10 +181,9 @@ function renderDiagnosis(diagnoses) {
     }
     diagnosisTableBody.innerHTML = "";
     console.log("Diagnoses to render:", diagnoses); // Debugging line
-    diagnoses.forEach(function (diagnosis, index) {
-        if (diagnosis.visible === true) {
-            var doctorName = diagnosis.doctor ? diagnosis.doctor.name : "Unknown";
-            var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(doctorName, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
+    diagnoses.forEach(function (diag, index) {
+        if (diag.visible === true) {
+            var row = "<tr>\n                <td>".concat(diag.diagnosisName, "</td>\n                <td>").concat(diag.doctor.name, "</td>\n                <td>").concat(diag.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
             diagnosisTableBody.innerHTML += row;
         }
     });
