@@ -85,11 +85,13 @@ function addDiagnosis(event) {
     var date = new Date().toISOString().split('T')[0]; // Current date
     var prescription = document.getElementById('diagnosisPrescription').value;
     var comment = document.getElementById('diagnosisComment').value;
+    var visible = true;
     var newDiagnosis = {
         diagnosisName: diagnosisName,
         doctorName: doctorName,
         date: date,
         prescription: prescription,
+        visible: visible,
         comment: comment
     };
     diagnoses.push(newDiagnosis);

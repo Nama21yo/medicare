@@ -121,12 +121,14 @@ function addDiagnosis(event: Event): void {
     const date = new Date().toISOString().split('T')[0]; // Current date
     const prescription = (document.getElementById('diagnosisPrescription') as HTMLTextAreaElement).value;
     const comment = (document.getElementById('diagnosisComment') as HTMLTextAreaElement).value;
+    const visible = true;
 
     const newDiagnosis: Diagnosis = {
         diagnosisName,
         doctorName,
         date,
         prescription,
+        visible,
         comment
     };
     
