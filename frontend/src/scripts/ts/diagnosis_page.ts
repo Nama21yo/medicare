@@ -1,5 +1,3 @@
-
-
 interface Diagnosis {
     diagnosis_id: number;
     diagnosisName: string;
@@ -24,80 +22,59 @@ interface Patient {
     address: string;
     created_at: string;
     updated_at: string;
-  }
-  
-  let patients: Patient[]= []; 
-  let totalDiagnoses: number = 0;
-  let diagnosis: Diagnosis[] = [];
+}
+
+let patients: Patient[] = []; 
+let totalDiagnoses: number = 0;
+let diagnosis: Diagnosis[] = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     // Function to get query parameters from the URL
     function getQueryParams(): { [key: string]: string } {
-      const params: { [key: string]: string } = {};
-      window.location.search.substring(1).split('&').forEach(param => {
-        const [key, value] = param.split('=');
-        params[key] = decodeURIComponent(value);
-      });
-      return params;
+        const params: { [key: string]: string } = {};
+        window.location.search.substring(1).split('&').forEach(param => {
+            const [key, value] = param.split('=');
+            params[key] = decodeURIComponent(value);
+        });
+        return params;
     }
-  
+
     // Get the patient_id from the query parameters
     const queryParams = getQueryParams();
     const patientId = queryParams['patient_id'];
 
+    console.log("Patient ID from URL:", patientId); // Debugging line
+
     const fetchPaitient = async (): Promise<void> => {
         try {
-          const response = await fetch("http://localhost:4000/api/v1/patients");
-          const data: Patient[] = await response.json();
-          patients = data;
-          
-          const currentPatient: Patient = patients.filter((patient) => patient.patient_id.toString() === patientId)[0];
-          fetchDiagnosis(currentPatient);
+            const response = await fetch("http://localhost:4000/api/v1/patients");
+            const data: Patient[] = await response.json();
+            patients = data;
+
+            const currentPatient: Patient = patients.filter((patient) => patient.patient_id.toString() === patientId)[0];
+            fetchDiagnosis(currentPatient);
         } catch (error) {
-          console.error("Error fetching data:", error);
+            console.error("Error fetching data:", error);
         }
-      };
-    
-      const fetchDiagnosis = async (currentPatient: Patient): Promise<void> => {
+    };
+
+    const fetchDiagnosis = async (currentPatient: Patient): Promise<void> => {
         try {
-          const response = await fetch("http://localhost:4000/api/v1/diagnoses");
-          const data: Diagnosis[] = await response.json();
-          diagnosis = data;
+            const response = await fetch("http://localhost:4000/api/v1/diagnoses");
+            const data: Diagnosis[] = await response.json();
+            diagnosis = data;
 
-          const currentDiagnosis = diagnosis.filter((current_diagnosis) => current_diagnosis.patient.patient_id === currentPatient.patient_id);
-          totalDiagnoses = currentDiagnosis.filter((d) => d.visible ).length;
-          renderDiagnoses(currentDiagnosis);
+            const currentDiagnosis = diagnosis.filter((current_diagnosis) => current_diagnosis.patient.patient_id === currentPatient.patient_id);
+            totalDiagnoses = currentDiagnosis.filter((d) => d.visible).length;
+            renderDiagnoses(currentDiagnosis);
         } catch (error) {
-          console.error("Error fetching data:", error);
+            console.error("Error fetching data:", error);
         }
-      };
+    };
 
-  
-    // Fetch and populate patient data based on the patient_id
-    // if (patientId) {
-    //   const patient = users.find(user => user.patient.patient_id.toString() === patientId);
-    //   if (patient) {
-    //     // Populate patient data on the page (adjust as needed)
-    //     document.getElementById('patientName').textContent = patient.name;
-    //     document.getElementById('patientAge').textContent = patient.age.toString();
-    //     // Add other fields as necessary
-    //   }
-    // }
-  
     // Initial rendering of diagnoses
     fetchPaitient();
-  });
-  
-
-
-// Sample data
-// const diagnoses: Diagnosis[] = [
-//     { diagnosisName: "Flu", doctorName: "Dr. John Doe", date: "2025-01-01", prescription: "advil", comment: "Rest and drink plenty of fluids", visible: true, },
-//     { diagnosisName: "Diabetes", doctorName: "Dr. Jane Smith", date: "2025-02-15", prescription: "insuline", comment: "Manage diet and exercise regularly", visible: false},
-//     // Add more sample diagnoses as needed
-// ];
-
-// let totalDiagnoses: number =
+});
 
 // Renders the diagnosis table
 function renderDiagnoses(diagnoses: Diagnosis[]): void {
@@ -119,10 +96,9 @@ function renderDiagnoses(diagnoses: Diagnosis[]): void {
     updateCounters();
 }
 
-
 // View a diagnosis (opens modal with details)
 function viewDiagnosis(index: number): void {
-    const diagnosis = diagnoses[index];
+    const diagnosis = diagnosis[index];
     (document.getElementById('viewDiagnosisName') as HTMLInputElement).value = diagnosis.diagnosisName;
     (document.getElementById('viewDoctorName') as HTMLInputElement).value = diagnosis.doctor.name;
     (document.getElementById('viewDate') as HTMLInputElement).value = diagnosis.created_at;
@@ -139,7 +115,7 @@ function closeViewDiagnosisModal(): void {
 // Implements search functionality
 function filterDiagnoses(): void {
     const searchValue = (document.getElementById('searchInput') as HTMLInputElement).value.toLowerCase();
-    const filteredDiagnoses = diagnoses.filter(diagnosis => 
+    const filteredDiagnoses = diagnosis.filter(diagnosis => 
         diagnosis.diagnosisName.toLowerCase().includes(searchValue) ||
         diagnosis.doctor.name.toLowerCase().includes(searchValue) ||
         diagnosis.created_at.toLowerCase().includes(searchValue)
@@ -160,33 +136,3 @@ function openAddDiagnosisModal(): void {
 function closeAddDiagnosisModal(): void {
     (document.getElementById('addDiagnosisModal') as HTMLElement).style.display = 'none';
 }
-
-// function addDiagnosis(event: Event): void {
-//     event.preventDefault();
-//     const diagnosisName = (document.getElementById('diagnosisName') as HTMLInputElement).value;
-//     const doctorName = "Dr. Placeholder"; // This should be fetched from the current logged-in doctor
-//     const date = new Date().toISOString().split('T')[0]; // Current date
-//     const prescription = (document.getElementById('diagnosisPrescription') as HTMLTextAreaElement).value;
-//     const comment = (document.getElementById('diagnosisComment') as HTMLTextAreaElement).value;
-//     const visible = true;
-
-//     const newDiagnosis: Diagnosis = {
-//         diagnosisName,
-//         doctorName,
-//         date,
-//         prescription,
-//         visible,
-//         comment
-//     };
-    
-//     diagnoses.push(newDiagnosis);
-//     totalDiagnoses++;
-//     renderDiagnoses(diagnoses);
-//     closeAddDiagnosisModal();
-// }
-
-
-// Initial rendering of diagnoses
-// document.addEventListener('DOMContentLoaded', () => {
-//     renderDiagnoses(diagnoses);
-// });

@@ -90,7 +90,9 @@ const viewRecordHistory = async (index: number): Promise<void> => {
   const patientId = Current_patient.patient.patient_id;
   // const Current_doctor = users[index];
   // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
-  const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
+  const redirectUrl = `diagnosis_page.html?patient_id=${encodeURIComponent(patientId)}`;
+
+  // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
    // Assuming 'patient_id' is a property of the patient object
 
   // Redirect to the diagnosis_page.html with the patient_id as a query parameter
