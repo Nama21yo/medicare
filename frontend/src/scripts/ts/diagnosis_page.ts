@@ -154,6 +154,7 @@ const addDiagnosis = async (event: Event): Promise<void> => {
   }
 };
 
+
 // Renders the diagnosis table
 function renderDiagnosis(diagnoses: Diagnosis[]): void {
   const diagnosisTableBody = document.getElementById(

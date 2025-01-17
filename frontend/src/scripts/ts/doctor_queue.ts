@@ -85,33 +85,18 @@ function renderUsers(users: Queue[]): void {
 
 //View record history
 
-// const viewRecordHistory = async (index: number): Promise<void> => {
-//   const Current_patient = users[index];
-//   const patientId = Current_patient.patient.patient_id;
-//   // const Current_doctor = users[index];
-//   // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
-//   const redirectUrl = `diagnosis_page.html?patient_id=${encodeURIComponent(patientId)}`;
-
-//   // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
-//    // Assuming 'patient_id' is a property of the patient object
-
-//   // Redirect to the diagnosis_page.html with the patient_id as a query parameter
-//   window.location.href = redirectUrl;
-// };
-
 const viewRecordHistory = async (index: number): Promise<void> => {
   const Current_patient = users[index];
   const patientId = Current_patient.patient.patient_id;
+  // const Current_doctor = users[index];
+  // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
+  const redirectUrl = `diagnosis_page.html?patient_id=${encodeURIComponent(patientId)}`;
 
-  // Get the form and input elements
-  const form = document.getElementById('viewRecordHistoryForm') as HTMLFormElement;
-  const patientIdInput = document.getElementById('patientIdInput') as HTMLInputElement;
+  // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
+   // Assuming 'patient_id' is a property of the patient object
 
-  // Set the patient_id input value
-  patientIdInput.value = patientId.toString();
-
-  // Submit the form
-  form.submit();
+  // Redirect to the diagnosis_page.html with the patient_id as a query parameter
+  window.location.href = redirectUrl;
 };
 
 // Adds event listeners to all pend buttons
