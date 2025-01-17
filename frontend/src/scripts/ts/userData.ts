@@ -2,12 +2,13 @@ const profileButton = document.getElementById("profile-button") as HTMLButtonEle
 const editProfileButton = document.getElementById("edit-profile-button") as HTMLButtonElement | null;
 const profileSection = document.getElementById("profile") as HTMLDivElement | null;
 const editProfileForm = document.getElementById("edit-profile") as HTMLFormElement | null;
-
+const userInfo = document.getElementById("user-info") as HTMLDivElement | null;
+const Menu = document.getElementById("menu-btn") as HTMLDivElement | null;
 const profileUrl = "http://localhost:4000/api/v1/users/5"; // API route for profile
 
 // Function to show the active profile
 function showMyProfile(): void {
-    if (!profileSection) {
+    if (!profileSection && !userInfo) {
         console.error("Profile section element not found.");
         return;
     }
@@ -21,19 +22,36 @@ function showMyProfile(): void {
         })
         .then((data) => {
             if (data.accountStatus === "active") {
+              if(userInfo){
+                userInfo.innerHTML = `
+                    <img src="imgs/profile.png" alt="Profile Picture">
+                    <h3>${data.username}</h3>
+                `;
+              }else{
                 profileSection.innerHTML = `
                     <h3>${data.username}</h3>
                     <p>Role: ${data.role.name}</p>
                     <p>Email: ${data.email}</p>
                     <p>Created At: ${new Date(data.created_at).toLocaleString()}</p>
                 `;
+              }
+
             } else {
+                if(userInfo){
+                userInfo.innerHTML = `<h3>Profile Not Found or Inactive</h3>`;
+                }
+                else{
                 profileSection.innerHTML = `<h3>Profile Not Found or Inactive</h3>`;
+                }
             }
         })
         .catch((err) => {
             console.error("Error fetching profile:", err);
+            if(userInfo){
+            userInfo.innerHTML = `<h3>Error loading profile</h3>`;
+            }else{
             profileSection.innerHTML = `<h3>Error loading profile</h3>`;
+            }
         });
 }
 
@@ -93,8 +111,50 @@ if (profileButton) {
     console.error("Profile button element not found.");
 }
 
+if (Menu) {
+    Menu.addEventListener("click", showMyProfile);
+}else {
+    console.error("Menu button element not found.");
+}
+
 if (editProfileButton) {
     editProfileButton.addEventListener("click", editProfile);
 } else {
     console.error("Edit profile button element not found.");
+}
+
+function storeActionAndNavigates(): void {
+  localStorage.setItem("action", "clickButton");
+  window.location.href = "profile.html";
+}
+
+const action = localStorage.getItem("action");
+
+if (action === "clickButton") {
+  const targetButton = document.querySelector("#profile-button") as HTMLButtonElement | null;
+
+  if (targetButton) {
+      targetButton.click();
+  }
+
+  // Clear the action to avoid repeated clicks on reload
+  localStorage.removeItem("action");
+}
+
+function storeActionAndNavigat(): void {
+  localStorage.setItem("action", "clickButton");
+  window.location.href = "receptionist_profile.html";
+}
+
+const actio = localStorage.getItem("action");
+
+if (actio === "clickButton") {
+  const targetButton = document.querySelector("#profile-button") as HTMLButtonElement | null;
+
+  if (targetButton) {
+      targetButton.click();
+  }
+
+  // Clear the action to avoid repeated clicks on reload
+  localStorage.removeItem("action");
 }
