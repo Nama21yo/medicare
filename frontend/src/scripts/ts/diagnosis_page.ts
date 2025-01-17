@@ -1,45 +1,92 @@
 
 
 interface Diagnosis {
+    diagnosis_id: number;
     diagnosisName: string;
-    doctorName: string;
-    date: string;
     prescription: string;
     comment: string;
+    patient: Patient;
+    doctor: User;
     visible: boolean;
+    created_at: string;
+    updated_at: string;
 }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     // Function to get query parameters from the URL
-//     function getQueryParams(): { [key: string]: string } {
-//       const params: { [key: string]: string } = {};
-//       window.location.search.substring(1).split('&').forEach(param => {
-//         const [key, value] = param.split('=');
-//         params[key] = decodeURIComponent(value);
-//       });
-//       return params;
-//     }
+interface Patient {
+    patient_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    date_of_birth: string;
+    gender: string;
+    registered_by: string;
+    address: string;
+    created_at: string;
+    updated_at: string;
+  }
   
-//     // Get the patient_id from the query parameters
-//     const queryParams = getQueryParams();
-//     const patientId = queryParams['patient_id'];
+  let patients: Patient[]= []; 
+  let totalDiagnoses: number = 0;
+  let diagnosis: Diagnosis[] = [];
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to get query parameters from the URL
+    function getQueryParams(): { [key: string]: string } {
+      const params: { [key: string]: string } = {};
+      window.location.search.substring(1).split('&').forEach(param => {
+        const [key, value] = param.split('=');
+        params[key] = decodeURIComponent(value);
+      });
+      return params;
+    }
+  
+    // Get the patient_id from the query parameters
+    const queryParams = getQueryParams();
+    const patientId = queryParams['patient_id'];
+
+    const fetchPaitient = async (): Promise<void> => {
+        try {
+          const response = await fetch("http://localhost:4000/api/v1/patients");
+          const data: Patient[] = await response.json();
+          patients = data;
+          
+          const currentPatient: Patient = patients.filter((patient) => patient.patient_id.toString() === patientId)[0];
+          fetchDiagnosis(currentPatient);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+    
+      const fetchDiagnosis = async (currentPatient: Patient): Promise<void> => {
+        try {
+          const response = await fetch("http://localhost:4000/api/v1/diagnoses");
+          const data: Diagnosis[] = await response.json();
+          diagnosis = data;
+
+          const currentDiagnosis = diagnosis.filter((current_diagnosis) => current_diagnosis.patient.patient_id === currentPatient.patient_id);
+
+          renderDiagnoses(currentDiagnosis);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
 
   
-//     // Fetch and populate patient data based on the patient_id
-//     if (patientId) {
-//       const patient = users.find(user => user.patient_id === patientId);
-//       if (patient) {
-//         // Populate patient data on the page (adjust as needed)
-//         document.getElementById('patientName').textContent = patient.name;
-//         document.getElementById('patientAge').textContent = patient.age.toString();
-//         // Add other fields as necessary
-//       }
-//     }
+    // Fetch and populate patient data based on the patient_id
+    // if (patientId) {
+    //   const patient = users.find(user => user.patient.patient_id.toString() === patientId);
+    //   if (patient) {
+    //     // Populate patient data on the page (adjust as needed)
+    //     document.getElementById('patientName').textContent = patient.name;
+    //     document.getElementById('patientAge').textContent = patient.age.toString();
+    //     // Add other fields as necessary
+    //   }
+    // }
   
-//     // Initial rendering of diagnoses
-//     renderDiagnoses(diagnoses);
-//   });
+    // Initial rendering of diagnoses
+    fetchPaitient();
+  });
   
 
 

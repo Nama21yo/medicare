@@ -88,7 +88,7 @@ function renderUsers(users: Queue[]): void {
 const viewRecordHistory = async (index: number): Promise<void> => {
   const Current_patient = users[index];
   const Current_doctor = users[index];
-  const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
+  // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
   const patientId = Current_patient.patient.patient_id; // Assuming 'patient_id' is a property of the patient object
 
   // Redirect to the diagnosis_page.html with the patient_id as a query parameter

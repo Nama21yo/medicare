@@ -86,7 +86,7 @@ function renderUsers(users) {
             ? "Pending"
             : user.status === 3
                 ? "Resolved Pending"
-                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
+                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"viewRecordHistory(").concat(index, ")\">View Diagnosis</button>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
             ? "Unpend"
             : user.status === 3
                 ? "Pend"
@@ -95,6 +95,18 @@ function renderUsers(users) {
     });
     updateCounters();
 }
+//View record history
+var viewRecordHistory = function (index) { return __awaiter(_this, void 0, void 0, function () {
+    var Current_patient, Current_doctor, patientId;
+    return __generator(this, function (_a) {
+        Current_patient = users[index];
+        Current_doctor = users[index];
+        patientId = Current_patient.patient.patient_id;
+        // Redirect to the diagnosis_page.html with the patient_id as a query parameter
+        window.location.href = "diagnosis_page.html?patient_id=".concat(patientId);
+        return [2 /*return*/];
+    });
+}); };
 // Adds event listeners to all pend buttons
 // function addPendEventListeners(): void {
 //     const pendButtons = document.querySelectorAll('.pend-btn');
