@@ -156,31 +156,30 @@ const addDiagnosis = async (event: Event): Promise<void> => {
 
 // Renders the diagnosis table
 function renderDiagnosis(diagnoses: Diagnosis[]): void {
-  const diagnosisTableBody = document.getElementById('diagnosisTableBody') as HTMLElement;
-    diagnosisTableBody.innerHTML = '';
-    diagnoses.forEach((diagnosis, index) => {
-        
-            const row = `<tr>
+  const diagnosisTableBody = document.getElementById(
+    "diagnosisTableBody"
+  );
+  if (!diagnosisTableBody) {
+    console.error("Diagnosis table body element not found");
+    return;
+  }
+  diagnosisTableBody.innerHTML = "";
+  console.log("Diagnoses to render:", diagnoses); // Debugging line
+  diagnoses.forEach((diagnosis, index) => {
+    if (diagnosis.visible === true) {
+      const doctorName = diagnosis.doctor ? diagnosis.doctor.name : "Unknown";
+      const row = `<tr>
                 <td>${diagnosis.diagnosisName}</td>
-                <td>${diagnosis.doctor.name}</td>
+                <td>${doctorName}</td>
                 <td>${diagnosis.created_at}</td>
                 <td>
-                    ${
-                        diagnosis.visible === true ? "Visible" : "Not Visible"
-                    }
-                </td>
-                <td>
-                    <button class="btn btn-primary btn-sm" onclick="isVisible(${index})">
-                    
-                    ${
-                        diagnosis.visible === false ? "Visible" : "Not Visible"
-                    }</button>
                     <button class="btn btn-primary btn-sm" onclick="viewDiagnosis(${index})">View Details</button>
-                    </td>
+                </td>
             </tr>`;
-            diagnosisTableBody.innerHTML += row;
-    });
-    updateCounters();
+      diagnosisTableBody.innerHTML += row;
+    }
+  });
+  updateCounters();
 }
 
 // View a diagnosis (opens modal with details)
