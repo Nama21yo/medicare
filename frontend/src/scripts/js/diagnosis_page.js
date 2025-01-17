@@ -158,7 +158,7 @@ var addDiagnosis = function (event) { return __awaiter(_this, void 0, void 0, fu
                 // Update the counter (if applicable) and UI
                 totalDiagnoses++;
                 updateCounters();
-                renderDiagnoses(); // Assuming this function renders diagnoses to the UI
+                renderDiagnoses(diagnosis_1); // Assuming this function renders diagnoses to the UI
                 closeAddDiagnosisModal(); // Close the modal after successful submission
                 return [3 /*break*/, 5];
             case 4:
