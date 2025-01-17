@@ -178,10 +178,10 @@ function renderDiagnosis(diagnoses) {
     diagnosisTableBody.innerHTML = "";
     console.log("Diagnoses to render:", diagnoses); // Debugging line
     diagnoses.forEach(function (diagnosis, index) {
-        if (diagnosis.visible) {
-            var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctor.name, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
-            diagnosisTableBody.innerHTML += row;
-        }
+        // if (diagnosis.visible === true) {
+        var row = "<tr>\n                <td>".concat(diagnosis.diagnosisName, "</td>\n                <td>").concat(diagnosis.doctor.name, "</td>\n                <td>").concat(diagnosis.created_at, "</td>\n                <td>\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"viewDiagnosis(").concat(index, ")\">View Details</button>\n                </td>\n            </tr>");
+        diagnosisTableBody.innerHTML += row;
+        // }
     });
     updateCounters();
 }
