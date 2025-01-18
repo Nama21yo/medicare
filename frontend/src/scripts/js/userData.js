@@ -232,16 +232,16 @@ function getUserIdFromToken() {
 function redirectToHome() {
     fetchUserData().then(function (data) {
         if (data) {
-            if (data.role.name === "Branch") {
+            if (data.role.name === "branch") {
                 window.location.href = "./admin.html";
             }
-            else if (data.role.name === "Head Office") {
+            else if (data.role.name === "headoffice") {
                 window.location.href = "./head_office.html";
             }
-            else if (data.role.name === "Receptionist") {
+            else if (data.role.name === "receptionist") {
                 window.location.href = "./receptionist_queue.html";
             }
-            else if (data.role.name === "Doctor") {
+            else if (data.role.name === "doctor") {
                 window.location.href = "./doctor_queue.html";
             }
             else {
