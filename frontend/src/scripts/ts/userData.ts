@@ -10,17 +10,20 @@ const profileUrl = "http://localhost:4000/api/v1/users/user";
 const updateUrl = "http://localhost:4000/api/v1/users/update/";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const storedProfile = localStorage.getItem("profileData");
-  if (storedProfile) {
-    try {
-      const profileData = JSON.parse(storedProfile);
-      renderProfile(profileData);
-    } catch (error) {
-      console.error("Error parsing stored profile data:", error);
-      showMyProfile();
+  const profileSection = document.getElementById("myprofile");
+  if (profileSection) {
+    const storedProfile = localStorage.getItem("profileData");
+    if (storedProfile) {
+      try {
+        const profileData = JSON.parse(storedProfile);
+        renderProfile(profileData);
+      } catch (error) {
+        console.error("Error parsing stored profile data:", error);
+        showMyProfile();
+      }
+    } else {
+      showMyProfile(); 
     }
-  } else {
-    showMyProfile(); 
   }
 });
 
