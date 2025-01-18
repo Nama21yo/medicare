@@ -3,6 +3,8 @@ const editProfileButton = document.getElementById("edit-profile-button") as HTML
 const profileSection = document.getElementById("profile") as HTMLDivElement | null;
 const editProfileForm = document.getElementById("edit-profile") as HTMLFormElement | null;
 const backToHomeButton = document.querySelector(".btn-secondary") as HTMLAnchorElement | null;
+const Menu = document.getElementById("menu-btn") as HTMLImageElement | null;
+const userInfo = document.getElementById("user-info") as HTMLDivElement | null;
 
 const profileUrl = "http://localhost:4000/api/v1/users/user";
 const updateUrl = "http://localhost:4000/api/v1/users/update/";
@@ -30,7 +32,7 @@ async function fetchUserData(): Promise<any> {
 
 // Helper: Render profile based on role
 function renderProfile(data: any): void {
-  if (!profileSection) {
+  if (!profileSection && !userInfo) {
     console.error("Profile section element not found.");
     return;
   }
@@ -44,32 +46,67 @@ function renderProfile(data: any): void {
   `;
 
   if (role.name === "Branch") {
-    profileSection.innerHTML = `
-      ${commonDetails}
-      <p>Role: Branch</p>
-    `;
+    if (userInfo) {
+              userInfo.innerHTML = `
+                  <img src="imgs/profile.png" alt="Profile Picture">
+                  <h3>${data.username}</h3>
+                `;
+    } else {
+      profileSection.innerHTML = `
+        ${commonDetails}
+        <p>Role: Branch</p>
+      `;
+    }
   } else if (role.name === "Head Office") {
-    profileSection.innerHTML = `
-      ${commonDetails}
-      <p>Role: Head Office</p>
-    `;
+    if (userInfo) {
+      userInfo.innerHTML = `
+          <img src="imgs/profile.png" alt="Profile Picture">
+          <h3>${data.username}</h3>
+        `;
+    } else {
+      profileSection.innerHTML = `
+        ${commonDetails}
+        <p>Role: Head Office</p>
+      `;
+    }
   } else if(role.name === "Doctor"){
-    profileSection.innerHTML = `
-      ${commonDetails}
-      <p>Role: ${role.name}</p>
-    `;
+    if (userInfo) {
+      userInfo.innerHTML = `
+          <img src="imgs/profile.png" alt="Profile Picture">
+          <h3>${data.username}</h3>
+        `;
+    } else {
+      profileSection.innerHTML = `
+        ${commonDetails}
+        <p>Role: ${role.name}</p>
+      `;
+    }
   }
   else if(role.name === "Receptionist"){
-    profileSection.innerHTML = `
-      ${commonDetails}
-      <p>Role: ${role.name}</p>
-    `;
+    if (userInfo) {
+      userInfo.innerHTML = `
+          <img src="imgs/profile.png" alt="Profile Picture">
+          <h3>${data.username}</h3>
+        `;
+    } else {
+      profileSection.innerHTML = `
+        ${commonDetails}
+        <p>Role: ${role.name}</p>
+      `;
+    }
   }
   else {
-    profileSection.innerHTML = `
-      ${commonDetails}
-      <p>Role: ${role.name}</p>
-    `;
+    if (userInfo) {
+      userInfo.innerHTML = `
+          <img src="imgs/profile.png" alt="Profile Picture">
+          <h3>${data.username}</h3>
+        `;
+    } else {
+      profileSection.innerHTML = `
+        ${commonDetails}
+        <p>Role: ${role.name}</p>
+      `;
+    }
   }
 }
 
@@ -181,14 +218,25 @@ function redirectToHome(): void {
 // Event Listeners
 if (profileButton) {
   profileButton.addEventListener("click", showMyProfile);
+}else {
+    console.error("Profile button element not found.");
+  }
+if (Menu) {
+  Menu.addEventListener("click", showMyProfile);
+}else {
+  console.error("Menu button element not found.");
 }
 
 if (editProfileButton) {
   editProfileButton.addEventListener("click", editProfile);
+}else {
+  console.error("Edit profile button element not found.");
 }
 
 if (backToHomeButton) {
   backToHomeButton.addEventListener("click", redirectToHome);
+}else {
+  console.error("Back to home button element not found.");
 }
 
 
