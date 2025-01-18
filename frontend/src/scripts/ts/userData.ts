@@ -9,6 +9,21 @@ const userInfo = document.getElementById("user-info") as HTMLDivElement | null;
 const profileUrl = "http://localhost:4000/api/v1/users/user";
 const updateUrl = "http://localhost:4000/api/v1/users/update/";
 
+document.addEventListener("DOMContentLoaded", () => {
+  const storedProfile = localStorage.getItem("profileData");
+  if (storedProfile) {
+    try {
+      const profileData = JSON.parse(storedProfile);
+      renderProfile(profileData);
+    } catch (error) {
+      console.error("Error parsing stored profile data:", error);
+      showMyProfile();
+    }
+  } else {
+    showMyProfile(); 
+  }
+});
+
 // Helper: Fetch user data
 async function fetchUserData(): Promise<any> {
   try {
@@ -116,7 +131,12 @@ function showMyProfile(): void {
     if (data) {
       renderProfile(data);
     } else {
-      profileSection!.innerHTML = "<h3>Error loading profile</h3>";
+      if(profileSection){
+        profileSection!.innerHTML = "<h3>Error loading profile</h3>";
+      }
+      if(userInfo){
+        userInfo!.innerHTML = "<h3>Error loading profile</h3>";
+      }
     }
   });
 }
