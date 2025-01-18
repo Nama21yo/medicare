@@ -195,7 +195,8 @@ if (
     if (roleId === 2) {
       // Branch role
       additionalData.location = (form.location as HTMLInputElement).value;
-    } else if (roleId === 4) {
+    }
+    if (roleId === 2 || roleId === 4) {
       // Doctor role
       additionalData.specialization = (
         form.specialization as HTMLInputElement
@@ -203,7 +204,15 @@ if (
     }
 
     // Construct user data
-    const userData = { name, password, roleId, ...additionalData };
+    let userData = { name, password, ...additionalData };
+    const doctorData = {
+      name,
+      password,
+      speciality: additionalData.specialization,
+    };
+    const branchData = { name, password, location: additionalData.location };
+    console.log("additional data", additionalData);
+
     console.log("registered data", userData);
 
     try {
@@ -211,8 +220,10 @@ if (
       let endpoint = "http://localhost:4000/api/v1/users/register"; // Default route
       if (roleId === 2) {
         endpoint = `http://localhost:4000/api/v1/users/branches/signup/${email}`;
+        userData = branchData;
       } else if (roleId === 4) {
         endpoint = `http://localhost:4000/api/v1/users/doctors/signup/${email}`;
+        userData = doctorData;
       } else if (roleId === 5) {
         endpoint = `http://localhost:4000/api/v1/users/receptionists/signup/${email}`;
       }
@@ -239,7 +250,8 @@ if (
           window.location.href = "/headoffice";
           break;
         case 2:
-          window.location.href = "/branch";
+          window.location.href =
+            "http://127.0.0.1:5500/frontend/src/admin.html";
           break;
         case 3:
           window.location.href = "/patient";

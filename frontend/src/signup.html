@@ -29,53 +29,90 @@
             class="input-field"
             placeholder="Email"
             name="email"
-            required/>
+            required
+          />
           <input
             type="password"
             class="input-field"
             placeholder="Enter Password"
             name="password"
-            required/>
-          <button type="submit" class="submit-btn">Login</button>
+            required
+          />
+          <button id="login-btn" type="submit" class="submit-btn">Login</button>
         </form>
         <form class="input-group" id="signup">
           <input
             type="text"
             class="input-field"
             placeholder="Name"
-            name="name"
-            required/>
-          <select class="input-field form-control" name="role" required>
+            name="username"
+            required
+          />
+          <select
+            class="input-field form-control"
+            name="role"
+            required
+            id="roleSelect"
+            onchange="showRoleFields()"
+          >
             <option value="" disabled selected>Select Role</option>
             <option value="4">Doctor</option>
             <option value="5">Receptionist</option>
-            <option value="2">Admin</option>
+            <option value="2">Branch</option>
           </select>
           <input
             type="email"
             class="input-field"
             placeholder="Email"
             name="email"
-            required/>
+            required
+          />
           <input
             type="password"
             class="input-field"
             placeholder="Enter Password"
             name="password"
-            required/>
+            required
+          />
           <input
             type="password"
             class="input-field"
             placeholder="Confirm Password"
             name="confirmPassword"
-            required/>
-          <button type="submit" class="submit-btn">Signup</button>
+            required
+          />
+          <!-- Conditional fields -->
+          <div id="branchFields" clas="mb-3" style="display: none">
+            <input type="text" name="location" placeholder="Branch Location" />
+          </div>
+
+          <div id="doctorFields" style="display: none">
+            <input
+              type="text"
+              clas="mb-3"
+              name="specialization"
+              placeholder="Specialization"
+            />
+          </div>
+          <button type="submit" id="signup-btn" class="submit-btn">
+            Signup
+          </button>
         </form>
-        
       </div>
-      <button onclick="window.location.href='index.html'" class="back-to-home">Back to Home</button>
+      <button onclick="window.location.href='index.html'" class="back-to-home">
+        Back to Home
+      </button>
     </div>
 
+    <script>
+      function showRoleFields() {
+        const role = document.getElementById("roleSelect").value;
+        document.getElementById("branchFields").style.display =
+          role == 2 ? "block" : "none";
+        document.getElementById("doctorFields").style.display =
+          role == 2 || role == 4 ? "block" : "none";
+      }
+    </script>
     <script src="scripts/js/login.js"></script>
     <script src="scripts/js/userData.js"></script>
   </body>

@@ -210,7 +210,7 @@ else {
     // };
     // Signup Functionality
     var handleSignup = function (event) { return __awaiter(_this, void 0, void 0, function () {
-        var form, name, email, password, confirmPassword, roleId, additionalData, userData, endpoint, response, _a, token, user, error_2;
+        var form, name, email, password, confirmPassword, roleId, additionalData, userData, doctorData, branchData, endpoint, response, _a, token, user, error_2;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -230,11 +230,18 @@ else {
                         // Branch role
                         additionalData.location = form.location.value;
                     }
-                    else if (roleId === 4) {
+                    if (roleId === 2 || roleId === 4) {
                         // Doctor role
                         additionalData.specialization = form.specialization.value;
                     }
-                    userData = __assign({ name: name, password: password, roleId: roleId }, additionalData);
+                    userData = __assign({ name: name, password: password }, additionalData);
+                    doctorData = {
+                        name: name,
+                        password: password,
+                        speciality: additionalData.specialization,
+                    };
+                    branchData = { name: name, password: password, location: additionalData.location };
+                    console.log("additional data", additionalData);
                     console.log("registered data", userData);
                     _b.label = 1;
                 case 1:
@@ -242,9 +249,11 @@ else {
                     endpoint = "http://localhost:4000/api/v1/users/register";
                     if (roleId === 2) {
                         endpoint = "http://localhost:4000/api/v1/users/branches/signup/".concat(email);
+                        userData = branchData;
                     }
                     else if (roleId === 4) {
                         endpoint = "http://localhost:4000/api/v1/users/doctors/signup/".concat(email);
+                        userData = doctorData;
                     }
                     else if (roleId === 5) {
                         endpoint = "http://localhost:4000/api/v1/users/receptionists/signup/".concat(email);
@@ -269,7 +278,8 @@ else {
                             window.location.href = "/headoffice";
                             break;
                         case 2:
-                            window.location.href = "/branch";
+                            window.location.href =
+                                "http://127.0.0.1:5500/frontend/src/admin.html";
                             break;
                         case 3:
                             window.location.href = "/patient";
