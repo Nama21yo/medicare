@@ -44,7 +44,7 @@ var userInfo = document.getElementById("user-info");
 var profileUrl = "http://localhost:4000/api/v1/users/user";
 var updateUrl = "http://localhost:4000/api/v1/users/update/";
 document.addEventListener("DOMContentLoaded", function () {
-    const profileSection = document.getElementById("myprofile");
+    var profileSection = document.getElementById("myprofile");
     if (profileSection) {
         var storedProfile = localStorage.getItem("profileData");
         if (storedProfile) {
@@ -104,7 +104,7 @@ function renderProfile(data) {
             userInfo.innerHTML = "\n                  <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n                  <h3>".concat(data.username, "</h3>\n                ");
         }
         else {
-            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: Branch</p>\n      ");
+            profileSection.innerHTML = "\n        <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n        ".concat(commonDetails, "\n        <p>Role: Branch</p>\n      ");
         }
     }
     else if (role.name === "Head Office") {
@@ -112,7 +112,7 @@ function renderProfile(data) {
             userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
         }
         else {
-            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: Head Office</p>\n      ");
+            profileSection.innerHTML = "\n        <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n        ".concat(commonDetails, "\n        <p>Role: Head Office</p>\n      ");
         }
     }
     else if (role.name === "Doctor") {
@@ -120,7 +120,7 @@ function renderProfile(data) {
             userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
         }
         else {
-            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+            profileSection.innerHTML = "\n        <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
         }
     }
     else if (role.name === "Receptionist") {
@@ -128,7 +128,7 @@ function renderProfile(data) {
             userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
         }
         else {
-            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+            profileSection.innerHTML = "\n        <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
         }
     }
     else {
@@ -136,7 +136,7 @@ function renderProfile(data) {
             userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
         }
         else {
-            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+            profileSection.innerHTML = "\n        <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
         }
     }
 }
