@@ -44,27 +44,27 @@ var userInfo = document.getElementById("user-info");
 var profileUrl = "http://localhost:4000/api/v1/users/user";
 var updateUrl = "http://localhost:4000/api/v1/users/update/";
 document.addEventListener("DOMContentLoaded", function () {
-    var userId = getUserIdFromToken();
-    if (!userId) {
-        console.error("No user ID found. Unable to load profile.");
-        return;
-    }
+    // const userId = getUserIdFromToken();
+    // if (!userId) {
+    //   console.error("No user ID found. Unable to load profile.");
+    //   return;
+    // }
+    // if (window.location.href === "/profile")
     var profileSection = document.getElementById("myprofile");
     if (profileSection) {
-        var storedProfile = localStorage.getItem("profileData_".concat(userId));
-        if (storedProfile) {
-            try {
-                var profileData = JSON.parse(storedProfile);
-                renderProfile(profileData);
-            }
-            catch (error) {
-                console.error("Error parsing stored profile data:", error);
-                showMyProfile();
-            }
-        }
-        else {
-            showMyProfile();
-        }
+        showMyProfile();
+        // const storedProfile = localStorage.getItem(`profileData_${userId}`);
+        // if (storedProfile) {
+        //   try {
+        //     const profileData = JSON.parse(storedProfile);
+        //     renderProfile(profileData);
+        //   } catch (error) {
+        //     console.error("Error parsing stored profile data:", error);
+        //     showMyProfile();
+        //   }
+        // } else {
+        //   showMyProfile(); 
+        // }
     }
 });
 // Helper: Fetch user data
