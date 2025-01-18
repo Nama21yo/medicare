@@ -10,25 +10,28 @@ const profileUrl = "http://localhost:4000/api/v1/users/user";
 const updateUrl = "http://localhost:4000/api/v1/users/update/";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const userId = getUserIdFromToken();
-  if (!userId) {
-    console.error("No user ID found. Unable to load profile.");
-    return;
-  }
+  // const userId = getUserIdFromToken();
+  // if (!userId) {
+  //   console.error("No user ID found. Unable to load profile.");
+  //   return;
+  // }
+  
+  // if (window.location.href === "/profile")
   const profileSection = document.getElementById("myprofile");
-  if (profileSection) {
-    const storedProfile = localStorage.getItem(`profileData_${userId}`);
-    if (storedProfile) {
-      try {
-        const profileData = JSON.parse(storedProfile);
-        renderProfile(profileData);
-      } catch (error) {
-        console.error("Error parsing stored profile data:", error);
-        showMyProfile();
-      }
-    } else {
-      showMyProfile(); 
-    }
+  if(profileSection) {
+      showMyProfile();
+    // const storedProfile = localStorage.getItem(`profileData_${userId}`);
+    // if (storedProfile) {
+    //   try {
+    //     const profileData = JSON.parse(storedProfile);
+    //     renderProfile(profileData);
+    //   } catch (error) {
+    //     console.error("Error parsing stored profile data:", error);
+    //     showMyProfile();
+    //   }
+    // } else {
+    //   showMyProfile(); 
+    // }
   }
 });
 
