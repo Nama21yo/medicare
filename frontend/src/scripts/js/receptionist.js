@@ -257,6 +257,97 @@ var filterUsers = function () {
     });
     renderUsers(filteredUsers);
 };
+// Search users in Database
+var searchUsers = function () { return __awaiter(_this, void 0, void 0, function () {
+    var searchValue, patients, response, data, filteredUsers, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                searchValue = document.getElementById("searchDatabase").value.toLowerCase();
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/patients")];
+            case 2:
+                response = _a.sent();
+                return [4 /*yield*/, response.json()];
+            case 3:
+                data = _a.sent();
+                patients = data;
+                filteredUsers = patients.filter(function (patient) {
+                    return patient.first_name.toLowerCase().includes(searchValue) ||
+                        patient.email.toLowerCase().includes(searchValue) ||
+                        patient.phone_number.includes(searchValue);
+                });
+                renderResults(filteredUsers);
+                return [3 /*break*/, 5];
+            case 4:
+                error_5 = _a.sent();
+                console.error("Error fetching data:", error_5);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+var renderResults = function (filteredUsers) {
+    var resultsContainer = document.getElementById("results");
+    resultsContainer.innerHTML = "";
+    filteredUsers.forEach(function (user) {
+        var listItem = document.createElement("li");
+        listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+        listItem.innerHTML = "\n      <div>\n        <strong>Name:</strong> ".concat(user.first_name + " " + user.last_name, "<br>\n        <strong>Email:</strong> ").concat(user.email, "<br>\n        <strong>Phone:</strong> ").concat(user.phone_number, "\n      </div>\n      <button class=\"btn btn-primary\" onClick=addToQueue(").concat(user.patient_id, ")>Add to Queue</button>\n    ");
+        resultsContainer.appendChild(listItem);
+    });
+};
+var addToQueue = function (patient_id) { return __awaiter(_this, void 0, void 0, function () {
+    var token, base64Payload, payload, doctorId, queueData, queueResponse, queueEntry, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                token = localStorage.getItem("jwtToken");
+                if (!token) {
+                    console.error("No token found in local storage");
+                    return [2 /*return*/];
+                }
+                base64Payload = token.split(".")[1];
+                payload = JSON.parse(atob(base64Payload));
+                doctorId = payload.user_id;
+                queueData = {
+                    patient_id: patient_id,
+                    doctor_id: doctorId,
+                    status: 1,
+                };
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/queues", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: "Bearer ".concat(token),
+                        },
+                        body: JSON.stringify(queueData),
+                    })];
+            case 2:
+                queueResponse = _a.sent();
+                if (queueResponse.status !== 201) {
+                    throw new Error("Failed to add patient to queue");
+                }
+                return [4 /*yield*/, queueResponse.json()];
+            case 3:
+                queueEntry = _a.sent();
+                users.push(queueEntry);
+                activeEntries++;
+                renderUsers(users);
+                return [3 /*break*/, 5];
+            case 4:
+                error_6 = _a.sent();
+                console.error("Error adding user to queue:", error_6);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
 // Modal functions
 var openAddUserModal = function () {
     document.getElementById("addUserModal").style.display = "block";
