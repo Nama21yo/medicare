@@ -67,25 +67,6 @@ if (action === "clickButton") {
     localStorage.removeItem("action");
 }
 
-
-function storeActionAndNavigat(): void {
-    localStorage.setItem("action", "clickButton");
-    window.location.href = "receptionist_profile.html";
-  }
-  
-  const actio = localStorage.getItem("action");
-  
-  if (actio === "clickButton") {
-    const targetButton = document.querySelector("#profile-button") as HTMLButtonElement | null;
-  
-    if (targetButton) {
-        targetButton.click();
-    }
-  
-    // Clear the action to avoid repeated clicks on reload
-    localStorage.removeItem("action");
-  }
-
 // Logs out the user by clearing the JWT and redirecting to the login page
 function logoutUser(): void {
     localStorage.removeItem("jwtToken");
