@@ -183,7 +183,7 @@ if (
     const email = (form.email as HTMLInputElement).value;
     const password = (form.password as HTMLInputElement).value;
     const confirmPassword = (form.confirmPassword as HTMLInputElement).value;
-    const roleId = parseInt((form.role as HTMLInputElement).value, 10); // Role ID as a number
+    const roleId = parseInt((form.role as HTMLInputElement).value, 10);
 
     if (password !== confirmPassword) {
       alert("Passwords do not match");
@@ -242,7 +242,8 @@ if (
 
       // Store the JWT token
       localStorage.setItem("jwtToken", token);
-      localStorage.setItem("profileData", JSON.stringify(user));
+      const userId = user.id; 
+      // localStorage.setItem(`profileData_${userId}`, JSON.stringify(user));
 
       // Navigate based on roleId
       switch (roleId) {
