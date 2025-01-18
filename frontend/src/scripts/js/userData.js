@@ -39,6 +39,8 @@ var editProfileButton = document.getElementById("edit-profile-button");
 var profileSection = document.getElementById("profile");
 var editProfileForm = document.getElementById("edit-profile");
 var backToHomeButton = document.querySelector(".btn-secondary");
+var Menu = document.getElementById("menu-btn");
+var userInfo = document.getElementById("user-info");
 var profileUrl = "http://localhost:4000/api/v1/users/user";
 var updateUrl = "http://localhost:4000/api/v1/users/update/";
 // Helper: Fetch user data
@@ -72,26 +74,51 @@ function fetchUserData() {
 }
 // Helper: Render profile based on role
 function renderProfile(data) {
-    if (!profileSection) {
+    if (!profileSection && !userInfo) {
         console.error("Profile section element not found.");
         return;
     }
     var username = data.username, role = data.role, email = data.email, created_at = data.created_at;
     var commonDetails = "\n    <h3>".concat(username, "</h3>\n    <p>Email: ").concat(email, "</p>\n    <p>Created At: ").concat(new Date(created_at).toLocaleString(), "</p>\n  ");
     if (role.name === "Branch") {
-        profileSection.innerHTML = "\n      ".concat(commonDetails, "\n      <p>Role: Branch</p>\n    ");
+        if (userInfo) {
+            userInfo.innerHTML = "\n                  <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n                  <h3>".concat(data.username, "</h3>\n                ");
+        }
+        else {
+            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: Branch</p>\n      ");
+        }
     }
     else if (role.name === "Head Office") {
-        profileSection.innerHTML = "\n      ".concat(commonDetails, "\n      <p>Role: Head Office</p>\n    ");
+        if (userInfo) {
+            userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
+        }
+        else {
+            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: Head Office</p>\n      ");
+        }
     }
     else if (role.name === "Doctor") {
-        profileSection.innerHTML = "\n      ".concat(commonDetails, "\n      <p>Role: ").concat(role.name, "</p>\n    ");
+        if (userInfo) {
+            userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
+        }
+        else {
+            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+        }
     }
     else if (role.name === "Receptionist") {
-        profileSection.innerHTML = "\n      ".concat(commonDetails, "\n      <p>Role: ").concat(role.name, "</p>\n    ");
+        if (userInfo) {
+            userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
+        }
+        else {
+            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+        }
     }
     else {
-        profileSection.innerHTML = "\n      ".concat(commonDetails, "\n      <p>Role: ").concat(role.name, "</p>\n    ");
+        if (userInfo) {
+            userInfo.innerHTML = "\n          <img src=\"imgs/profile.png\" alt=\"Profile Picture\">\n          <h3>".concat(data.username, "</h3>\n        ");
+        }
+        else {
+            profileSection.innerHTML = "\n        ".concat(commonDetails, "\n        <p>Role: ").concat(role.name, "</p>\n      ");
+        }
     }
 }
 // Show Profile
@@ -206,11 +233,26 @@ function redirectToHome() {
 if (profileButton) {
     profileButton.addEventListener("click", showMyProfile);
 }
+else {
+    console.error("Profile button element not found.");
+}
+if (Menu) {
+    Menu.addEventListener("click", showMyProfile);
+}
+else {
+    console.error("Menu button element not found.");
+}
 if (editProfileButton) {
     editProfileButton.addEventListener("click", editProfile);
 }
+else {
+    console.error("Edit profile button element not found.");
+}
 if (backToHomeButton) {
     backToHomeButton.addEventListener("click", redirectToHome);
+}
+else {
+    console.error("Back to home button element not found.");
 }
 // const profileButton = document.getElementById(
 //   "profile-button"
