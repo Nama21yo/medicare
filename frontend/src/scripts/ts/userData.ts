@@ -161,16 +161,16 @@ function redirectToHome(): void {
   fetchUserData().then((data) => {
     if (data) {
       if (data.role.name === "Branch") {
-        window.location.href = "/branch-home.html";
+        window.location.href = "./admin.html";
       } else if (data.role.name === "Head Office") {
-        window.location.href = "/headoffice-home.html";
+        window.location.href = "./head_office.html";
       }else if(data.role.name === "Receptionist"){
-        window.location.href = "/receptionist-queue.html";
+        window.location.href = "./receptionist_queue.html";
       }else if(data.role.name === "Doctor"){
-        window.location.href = "/doctor-queue.html";
+        window.location.href = "./doctor_queue.html";
       }
       else {
-        window.location.href = "/index.html";
+        window.location.href = "./patient.html";
       }
     } else {
       console.error("Error fetching user data for redirection.");
