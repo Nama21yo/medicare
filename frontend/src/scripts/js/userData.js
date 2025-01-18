@@ -43,6 +43,22 @@ var Menu = document.getElementById("menu-btn");
 var userInfo = document.getElementById("user-info");
 var profileUrl = "http://localhost:4000/api/v1/users/user";
 var updateUrl = "http://localhost:4000/api/v1/users/update/";
+document.addEventListener("DOMContentLoaded", function () {
+    var storedProfile = localStorage.getItem("profileData");
+    if (storedProfile) {
+        try {
+            var profileData = JSON.parse(storedProfile);
+            renderProfile(profileData);
+        }
+        catch (error) {
+            console.error("Error parsing stored profile data:", error);
+            showMyProfile();
+        }
+    }
+    else {
+        showMyProfile();
+    }
+});
 // Helper: Fetch user data
 function fetchUserData() {
     return __awaiter(this, void 0, void 0, function () {
@@ -128,7 +144,12 @@ function showMyProfile() {
             renderProfile(data);
         }
         else {
-            profileSection.innerHTML = "<h3>Error loading profile</h3>";
+            if (profileSection) {
+                profileSection.innerHTML = "<h3>Error loading profile</h3>";
+            }
+            if (userInfo) {
+                userInfo.innerHTML = "<h3>Error loading profile</h3>";
+            }
         }
     });
 }
