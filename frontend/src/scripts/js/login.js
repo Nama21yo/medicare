@@ -210,7 +210,7 @@ else {
     // };
     // Signup Functionality
     var handleSignup = function (event) { return __awaiter(_this, void 0, void 0, function () {
-        var form, name, email, password, confirmPassword, roleId, additionalData, userData, doctorData, branchData, endpoint, response, _a, token, user, error_2;
+        var form, name, email, password, confirmPassword, roleId, additionalData, userData, doctorData, branchData, endpoint, response, _a, token, user, userId, error_2;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -271,7 +271,8 @@ else {
                     _a = _b.sent(), token = _a.token, user = _a.user;
                     // Store the JWT token
                     localStorage.setItem("jwtToken", token);
-                    localStorage.setItem("profileData", JSON.stringify(user));
+                    userId = user.id;
+                    // localStorage.setItem(`profileData_${userId}`, JSON.stringify(user));
                     // Navigate based on roleId
                     switch (roleId) {
                         case 1:
