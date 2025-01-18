@@ -71,6 +71,7 @@ function renderProfile(data: any): void {
                 `;
     } else {
       profileSection.innerHTML = `
+        <img src="imgs/profile.png" alt="Profile Picture">
         ${commonDetails}
         <p>Role: Branch</p>
       `;
@@ -83,6 +84,7 @@ function renderProfile(data: any): void {
         `;
     } else {
       profileSection.innerHTML = `
+        <img src="imgs/profile.png" alt="Profile Picture">
         ${commonDetails}
         <p>Role: Head Office</p>
       `;
@@ -95,6 +97,7 @@ function renderProfile(data: any): void {
         `;
     } else {
       profileSection.innerHTML = `
+        <img src="imgs/profile.png" alt="Profile Picture">
         ${commonDetails}
         <p>Role: ${role.name}</p>
       `;
@@ -108,6 +111,7 @@ function renderProfile(data: any): void {
         `;
     } else {
       profileSection.innerHTML = `
+        <img src="imgs/profile.png" alt="Profile Picture">
         ${commonDetails}
         <p>Role: ${role.name}</p>
       `;
@@ -121,6 +125,7 @@ function renderProfile(data: any): void {
         `;
     } else {
       profileSection.innerHTML = `
+        <img src="imgs/profile.png" alt="Profile Picture">
         ${commonDetails}
         <p>Role: ${role.name}</p>
       `;
