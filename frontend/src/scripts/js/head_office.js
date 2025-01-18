@@ -51,7 +51,7 @@ var fetchBranchData = function () { return __awaiter(_this, void 0, void 0, func
                 return [4 /*yield*/, response.json()];
             case 2:
                 branches_1 = _a.sent();
-                completeBranches = branches_1.filter(function (branch) { return branch.name && branch.location && branch.contact_phone && branch.specialization && branch.contact_email; });
+                completeBranches = branches_1.filter(function (branch) { return branch.name && branch.location && branch.specialization && branch.contact_email; });
                 totalBranches = completeBranches.length;
                 pendingBranches = branches_1.length - completeBranches.length;
                 // You can add a function to render or use these variables as needed
@@ -210,6 +210,7 @@ var addBranch = function (event) { return __awaiter(_this, void 0, void 0, funct
                 confirmation_1.classList.add("alert", "alert-success");
                 confirmation_1.style.backgroundColor = "lightgreen";
                 confirmation_1.style.color = "green";
+                pendingBranches++;
                 // Show the confirmation for a few seconds
                 setTimeout(function () {
                     confirmation_1.innerText = "";
