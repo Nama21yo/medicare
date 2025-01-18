@@ -84,7 +84,7 @@ const renderUsers = (users: Queue[]): void => {
             <button class="btn btn-sm" style="color: white;" onclick="resolvePendingUser(${index})" ${
       resolveButtonDisabled ? "disabled" : ""
     }>Resolve Pending</button>
-            <button class="btn btn-sm" style="color: white;" onclick="deleteUser(${index})">Delete</button>
+            <button class="btn btn-sm" style="background-color: red;" onclick="deleteUser(${index})">Delete</button>
           </td>
         </tr>`;
     userTableBody.innerHTML += row;
