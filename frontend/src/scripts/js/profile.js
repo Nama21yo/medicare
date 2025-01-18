@@ -55,19 +55,6 @@ if (action === "clickButton") {
     // Clear the action to avoid repeated clicks on reload
     localStorage.removeItem("action");
 }
-function storeActionAndNavigat() {
-    localStorage.setItem("action", "clickButton");
-    window.location.href = "receptionist_profile.html";
-}
-var actio = localStorage.getItem("action");
-if (actio === "clickButton") {
-    var targetButton = document.querySelector("#profile-button");
-    if (targetButton) {
-        targetButton.click();
-    }
-    // Clear the action to avoid repeated clicks on reload
-    localStorage.removeItem("action");
-}
 // Logs out the user by clearing the JWT and redirecting to the login page
 function logoutUser() {
     localStorage.removeItem("jwtToken");
