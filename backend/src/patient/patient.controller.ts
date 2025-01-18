@@ -17,7 +17,7 @@ export class PatientController {
    * @returns The created Patient object
    */
   @Post()
-  @Roles('receptionist', 'branch', 'headoffice')
+  // @Roles('receptionist', 'branch', 'headoffice')
   async register(@Body() createPatientDto: CreatePatientDto): Promise<Patient> {
     return this.patientService.register(createPatientDto);
   }
