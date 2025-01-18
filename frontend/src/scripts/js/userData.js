@@ -44,9 +44,14 @@ var userInfo = document.getElementById("user-info");
 var profileUrl = "http://localhost:4000/api/v1/users/user";
 var updateUrl = "http://localhost:4000/api/v1/users/update/";
 document.addEventListener("DOMContentLoaded", function () {
+    var userId = getUserIdFromToken();
+    if (!userId) {
+        console.error("No user ID found. Unable to load profile.");
+        return;
+    }
     var profileSection = document.getElementById("myprofile");
     if (profileSection) {
-        var storedProfile = localStorage.getItem("profileData");
+        var storedProfile = localStorage.getItem("profileData_".concat(userId));
         if (storedProfile) {
             try {
                 var profileData = JSON.parse(storedProfile);
