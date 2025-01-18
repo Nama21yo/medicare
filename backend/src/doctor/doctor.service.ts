@@ -9,6 +9,7 @@ import { Doctor } from './doctor.entity';
 import { AddDoctorDto } from './dto/addDoctorDto';
 import { DoctorSignupDto } from './dto/doctorSignUp.dto';
 import { Branch } from 'src/branch/branch.entity';
+import { UpdateUserDto } from 'src/user/dto/updateUser.dto';
 
 @Injectable()
 export class DoctorService {
@@ -35,6 +36,10 @@ export class DoctorService {
     return this.doctorRepository.save(doctor);
   }
 
+  async findAll(): Promise<Doctor[]> {
+    return this.doctorRepository.find({ relations: ['branch'] });
+  }
+
   async signup(email: string, dto: DoctorSignupDto): Promise<Doctor> {
     const doctor = await this.doctorRepository.findOne({ where: { email } });
 
@@ -53,6 +58,29 @@ export class DoctorService {
     doctor.password = dto.password;
     doctor.is_signed_up = true;
 
+    return this.doctorRepository.save(doctor);
+  }
+  async findByEmail(email: string): Promise<any> {
+    const doctor = await this.doctorRepository.findOne({ where: { email } });
+
+    if (!doctor) {
+      throw new BadRequestException('Doctor with this email does not exist');
+    }
+
+    return doctor;
+  }
+
+  async update(email: string, updateDto: UpdateUserDto): Promise<any> {
+    const doctor = await this.findByEmail(email);
+    if (!doctor) {
+      throw new BadRequestException('Doctor not found');
+    }
+
+    // Update doctor-specific fields
+    if (updateDto.username) doctor.name = updateDto.username;
+    if (updateDto.password) doctor.password = updateDto.password;
+
+    // Save the updated doctor details
     return this.doctorRepository.save(doctor);
   }
 }

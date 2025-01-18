@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Param, UseGuards, Get } from '@nestjs/common';
 import { ReceptionistService } from './receptionist.service';
 import { AddReceptionistDto } from './dto/addReceptionistDto.dto';
 import { ReceptionistSignupDto } from './dto/receptionistSignup.dto';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/decorator/roles.decorator';
+import { Receptionist } from './receptionist.entity';
 
 @Controller('v1/receptionists')
 @UseGuards(RolesGuard)
@@ -23,4 +24,8 @@ export class ReceptionistController {
   // ) {
   //   return this.receptionistService.signup(email, dto);
   // }
+  @Get()
+  async findAll(): Promise<Receptionist[]> {
+    return this.receptionistService.findAll();
+  }
 }

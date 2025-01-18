@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Param, UseGuards, Get } from '@nestjs/common';
 import { DoctorService } from './doctor.service';
 import { AddDoctorDto } from './dto/addDoctorDto';
 import { DoctorSignupDto } from './dto/doctorSignUp.dto';
@@ -24,4 +24,12 @@ export class DoctorController {
   // ): Promise<Doctor> {
   //   return this.doctorService.signup(email, dto);
   // }
+  // @Get()
+  // async findAll(): Promise<Branch[]> {
+  //   return this.branchService.findAll();
+  // }
+  @Get()
+  async findAll(): Promise<Doctor[]> {
+    return this.doctorService.findAll();
+  }
 }

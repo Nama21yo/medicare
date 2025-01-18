@@ -9,6 +9,7 @@ import { Receptionist } from './receptionist.entity';
 import { AddReceptionistDto } from './dto/addReceptionistDto.dto';
 import { ReceptionistSignupDto } from './dto/receptionistSignup.dto';
 import { Branch } from 'src/branch/branch.entity';
+import { UpdateUserDto } from 'src/user/dto/updateUser.dto';
 
 @Injectable()
 export class ReceptionistService {
@@ -36,6 +37,9 @@ export class ReceptionistService {
     return this.receptionistRepository.save(receptionist);
   }
 
+  async findAll(): Promise<Receptionist[]> {
+    return this.receptionistRepository.find({ relations: ['branch'] });
+  }
   async signup(
     email: string,
     dto: ReceptionistSignupDto,
@@ -57,6 +61,34 @@ export class ReceptionistService {
     receptionist.password = dto.password; // Automatically hashed via BeforeInsert
     receptionist.is_signed_up = true;
 
+    return this.receptionistRepository.save(receptionist);
+  }
+
+  async findByEmail(email: string): Promise<any> {
+    const receptionist = await this.receptionistRepository.findOne({
+      where: { email },
+    });
+
+    if (!receptionist) {
+      throw new BadRequestException(
+        'Receptionist with this email does not exist',
+      );
+    }
+
+    return receptionist;
+  }
+
+  async update(email: string, updateDto: UpdateUserDto): Promise<any> {
+    const receptionist = await this.findByEmail(email);
+    if (!receptionist) {
+      throw new BadRequestException('Receptionist not found');
+    }
+
+    // Update receptionist-specific fields
+    if (updateDto.username) receptionist.name = updateDto.username;
+    if (updateDto.password) receptionist.password = updateDto.password;
+
+    // Save the updated receptionist details
     return this.receptionistRepository.save(receptionist);
   }
 }

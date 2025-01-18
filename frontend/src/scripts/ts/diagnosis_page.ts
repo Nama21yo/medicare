@@ -109,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
     <p class="card-text">Phone: ${currentPatient.phone_number}</p>
   `;
   }
-
   // Initial rendering of diagnoses
   fetchPatient().then(() => {
     showBasicPatientInfo();
