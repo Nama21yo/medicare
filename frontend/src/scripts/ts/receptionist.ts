@@ -254,6 +254,94 @@ const filterUsers = (): void => {
   renderUsers(filteredUsers);
 };
 
+// Search users in Database
+
+const searchUsers = async (): Promise<void> => {
+  const searchValue = (
+    document.getElementById("searchDatabase") as HTMLInputElement
+  ).value.toLowerCase();
+  let patients: Patient[]; 
+
+  try {
+    const response = await fetch("http://localhost:4000/api/v1/patients");
+    const data: Patient[] = await response.json();
+    patients = data;
+
+    // Filter users based on search value
+    const filteredUsers = patients.filter(patient => 
+      patient.first_name.toLowerCase().includes(searchValue) ||
+      patient.email.toLowerCase().includes(searchValue) ||
+      patient.phone_number.includes(searchValue)
+    );
+
+    renderResults(filteredUsers);
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+const renderResults = (filteredUsers: Patient[]) => {
+  const resultsContainer = document.getElementById("results") as HTMLElement;
+  resultsContainer.innerHTML = "";
+
+  filteredUsers.forEach(user => {
+    const listItem = document.createElement("li");
+    listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+    listItem.innerHTML = `
+      <div>
+        <strong>Name:</strong> ${user.first_name + " " + user.last_name}<br>
+        <strong>Email:</strong> ${user.email}<br>
+        <strong>Phone:</strong> ${user.phone_number}
+      </div>
+      <button class="btn btn-primary" onClick=addToQueue(${user.patient_id})>Add to Queue</button>
+    `;
+    resultsContainer.appendChild(listItem);
+  });
+}
+
+const addToQueue = async (patient_id: number): Promise<void> => {
+  const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    console.error("No token found in local storage");
+    return;
+  }
+
+  const base64Payload = token.split(".")[1];
+  const payload = JSON.parse(atob(base64Payload));
+  const doctorId = payload.user_id;
+
+  const queueData = {
+    patient_id: patient_id,
+    doctor_id: doctorId,
+    status: 1,
+  };
+
+  try {
+    const queueResponse = await fetch("http://localhost:4000/api/v1/queues", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(queueData),
+    });
+
+    if (queueResponse.status !== 201) {
+      throw new Error("Failed to add patient to queue");
+    }
+
+    const queueEntry: Queue = await queueResponse.json();
+    users.push(queueEntry);
+    activeEntries++;
+    renderUsers(users);
+
+  } catch (error) {
+    console.error("Error adding user to queue:", error);
+  }
+};
+
+
 // Modal functions
 const openAddUserModal = (): void => {
   document.getElementById("addUserModal")!.style.display = "block";
