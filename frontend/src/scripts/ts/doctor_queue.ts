@@ -65,7 +65,7 @@ function renderUsers(users: Queue[]): void {
                 : "Not Pending"
             }</td>
             <td>
-                <button class="btn btn-secondary btn-sm pend-btn" onclick="viewRecordHistory(${index})">View Diagnosis</button>
+                <button class="btn btn-primary btn-sm" onclick="viewRecordHistory(${index})">View Record</button>
                 <button class="btn btn-secondary btn-sm pend-btn" onclick="pendUser(${index})">
                     ${
                       user.status === 2
@@ -140,18 +140,44 @@ const completeUser = async (index: number): Promise<void> => {
 // }
 
 // Pends users
+const updateUserStatus = async (
+  queue_id: number,
+  newStatus: number
+): Promise<void> => {
+  try {
+    await fetch(`http://localhost:4000/api/v1/queues/${queue_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    });
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    throw error;
+  }
+};
+
+const fetchUserDetails = async (queue_id: number): Promise<Queue> => {
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/v1/queues/${queue_id}`
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user details: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    throw error;
+  }
+};
+
+
 const pendUser = async (index: number): Promise<void> => {
   const user = users[index];
 
   try {
     // Step 1: Fetch the current queue details from the backend
-    const response = await fetch(
-      `http://localhost:4000/api/v1/queues/${user.queue_id}`
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch user details: ${response.statusText}`);
-    }
-    const currentQueue: Queue = await response.json();
+    const currentQueue = await fetchUserDetails(user.queue_id);
 
     // Step 2: Update the status based on current data
     let newStatus: number;
@@ -168,19 +194,7 @@ const pendUser = async (index: number): Promise<void> => {
     }
 
     // Step 3: Send the updated status back to the server
-    const putResponse = await fetch(
-      `http://localhost:4000/api/v1/queues/${currentQueue.queue_id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      }
-    );
-    if (!putResponse.ok) {
-      throw new Error(
-        `Failed to update user status: ${putResponse.statusText}`
-      );
-    }
+    await updateUserStatus(currentQueue.queue_id, newStatus);
 
     // Step 4: Update the local user object and re-render
     user.status = newStatus;
@@ -189,7 +203,6 @@ const pendUser = async (index: number): Promise<void> => {
     console.error("Error resolving user:", error);
   }
 };
-
 // function pendUser(index: number): void {
 //     if (users[index].status.toLowerCase() === "not pending") {
 //         users[index].status = "Pending";

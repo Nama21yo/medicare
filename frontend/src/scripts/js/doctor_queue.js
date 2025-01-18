@@ -86,7 +86,7 @@ function renderUsers(users) {
             ? "Pending"
             : user.status === 3
                 ? "Resolved Pending"
-                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"viewRecordHistory(").concat(index, ")\">View Diagnosis</button>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
+                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-primary btn-sm\" onclick=\"viewRecordHistory(").concat(index, ")\">View Record</button>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
             ? "Unpend"
             : user.status === 3
                 ? "Pend"
@@ -96,28 +96,16 @@ function renderUsers(users) {
     updateCounters();
 }
 //View record history
-// const viewRecordHistory = async (index: number): Promise<void> => {
-//   const Current_patient = users[index];
-//   const patientId = Current_patient.patient.patient_id;
-//   // const Current_doctor = users[index];
-//   // const doctorId = Current_doctor.doctor.user_id; // Assuming 'doctor' is a property of the patient object
-//   const redirectUrl = `diagnosis_page.html?patient_id=${encodeURIComponent(patientId)}`;
-//   // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
-//    // Assuming 'patient_id' is a property of the patient object
-//   // Redirect to the diagnosis_page.html with the patient_id as a query parameter
-//   window.location.href = redirectUrl;
-// };
 var viewRecordHistory = function (index) { return __awaiter(_this, void 0, void 0, function () {
-    var Current_patient, patientId, form, patientIdInput;
+    var Current_patient, patientId, redirectUrl;
     return __generator(this, function (_a) {
         Current_patient = users[index];
         patientId = Current_patient.patient.patient_id;
-        form = document.getElementById('viewRecordHistoryForm');
-        patientIdInput = document.getElementById('patientIdInput');
-        // Set the patient_id input value
-        patientIdInput.value = patientId.toString();
-        // Submit the form
-        form.submit();
+        redirectUrl = "diagnosis_page.html?patient_id=".concat(encodeURIComponent(patientId));
+        // const redirectUrl = `diagnosis_page.html?patientId=${encodeURIComponent(patientId)}`;
+        // Assuming 'patient_id' is a property of the patient object
+        // Redirect to the diagnosis_page.html with the patient_id as a query parameter
+        window.location.href = redirectUrl;
         return [2 /*return*/];
     });
 }); };
@@ -174,23 +162,61 @@ var completeUser = function (index) { return __awaiter(_this, void 0, void 0, fu
 //     renderUsers(users);
 // }
 // Pends users
+var updateUserStatus = function (queue_id, newStatus) { return __awaiter(_this, void 0, void 0, function () {
+    var error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/queues/".concat(queue_id), {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: newStatus }),
+                    })];
+            case 1:
+                _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                console.error("Error updating user status:", error_3);
+                throw error_3;
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var fetchUserDetails = function (queue_id) { return __awaiter(_this, void 0, void 0, function () {
+    var response, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/queues/".concat(queue_id))];
+            case 1:
+                response = _a.sent();
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user details: ".concat(response.statusText));
+                }
+                return [4 /*yield*/, response.json()];
+            case 2: return [2 /*return*/, _a.sent()];
+            case 3:
+                error_4 = _a.sent();
+                console.error("Error fetching user details:", error_4);
+                throw error_4;
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
 var pendUser = function (index) { return __awaiter(_this, void 0, void 0, function () {
-    var user, response, currentQueue, newStatus, putResponse, error_3;
+    var user, currentQueue, newStatus, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 user = users[index];
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
-                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/queues/".concat(user.queue_id))];
+                _a.trys.push([1, 4, , 5]);
+                return [4 /*yield*/, fetchUserDetails(user.queue_id)];
             case 2:
-                response = _a.sent();
-                if (!response.ok) {
-                    throw new Error("Failed to fetch user details: ".concat(response.statusText));
-                }
-                return [4 /*yield*/, response.json()];
-            case 3:
                 currentQueue = _a.sent();
                 newStatus = void 0;
                 if (currentQueue.status === 2) {
@@ -206,25 +232,20 @@ var pendUser = function (index) { return __awaiter(_this, void 0, void 0, functi
                     newStatus = 2; // Move from Not Pending to Pending
                     pending++;
                 }
-                return [4 /*yield*/, fetch("http://localhost:4000/api/v1/queues/".concat(currentQueue.queue_id), {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ status: newStatus }),
-                    })];
-            case 4:
-                putResponse = _a.sent();
-                if (!putResponse.ok) {
-                    throw new Error("Failed to update user status: ".concat(putResponse.statusText));
-                }
+                // Step 3: Send the updated status back to the server
+                return [4 /*yield*/, updateUserStatus(currentQueue.queue_id, newStatus)];
+            case 3:
+                // Step 3: Send the updated status back to the server
+                _a.sent();
                 // Step 4: Update the local user object and re-render
                 user.status = newStatus;
                 renderUsers(users);
-                return [3 /*break*/, 6];
-            case 5:
-                error_3 = _a.sent();
-                console.error("Error resolving user:", error_3);
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 5];
+            case 4:
+                error_5 = _a.sent();
+                console.error("Error resolving user:", error_5);
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
