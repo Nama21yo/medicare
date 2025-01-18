@@ -76,7 +76,7 @@ var renderUsers = function (users) {
             ? "Not Pending"
             : user.status === 2
                 ? "Pending"
-                : "Resolved Pending", "\n          </td>\n          <td>\n            <button class=\"btn btn-sm\" onclick=\"resolvePendingUser(").concat(index, ")\" ").concat(resolveButtonDisabled ? "disabled" : "", ">Resolve Pending</button>\n            <button class=\"btn btn-sm\" onclick=\"deleteUser(").concat(index, ")\">Delete</button>\n          </td>\n        </tr>");
+                : "Resolved Pending", "\n          </td>\n          <td>\n            <button class=\"btn btn-sm\" style=\"color: white;\" onclick=\"resolvePendingUser(").concat(index, ")\" ").concat(resolveButtonDisabled ? "disabled" : "", ">Resolve Pending</button>\n            <button class=\"btn btn-sm\" style=\"color: white;\" onclick=\"deleteUser(").concat(index, ")\">Delete</button>\n          </td>\n        </tr>");
         userTableBody.innerHTML += row;
     });
     updateCounters();
