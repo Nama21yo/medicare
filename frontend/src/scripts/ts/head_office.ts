@@ -22,7 +22,7 @@ const fetchBranchData = async (): Promise<void> => {
       const response = await fetch("http://localhost:4000/api/v1/branches"); // Some API
       const branches: Branch[] = await response.json();
       // Update the counters based on the fetched branches
-      let completeBranches = branches.filter((branch) => branch.name && branch.location && branch.contact_phone && branch.specialization && branch.contact_email);
+      let completeBranches = branches.filter((branch) => branch.name && branch.location && branch.specialization && branch.contact_email);
 
       totalBranches = completeBranches.length;
       pendingBranches = branches.length - completeBranches.length;
@@ -191,6 +191,7 @@ const addBranch = async (event: Event): Promise<void> => {
     confirmation.classList.add("alert", "alert-success");
     confirmation.style.backgroundColor = "lightgreen";
     confirmation.style.color = "green";
+    pendingBranches++;
 
     // Show the confirmation for a few seconds
     setTimeout(() => {
