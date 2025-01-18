@@ -68,7 +68,7 @@ function renderUsers(users: Queue[]): void {
             }</td>
             <td>
                 <button class="btn btn-primary btn-sm" onclick="viewRecordHistory(${index})">View Record</button>
-                <button class="btn btn-secondary btn-sm pend-btn" onclick="pendUser(${index})">
+                <button class="btn btn-secondary btn-sm pend-btn" style="color: yellow;" onclick="pendUser(${index})">
                     ${
                       user.status === 2
                         ? "Unpend"
@@ -77,7 +77,7 @@ function renderUsers(users: Queue[]): void {
                         : "Pend"
                     }
                 </button>
-                <button class="btn btn-success btn-sm" onclick="completeUser(${index})">Complete</button>
+                <button class="btn btn-success btn-sm" style="color: green;" onclick="completeUser(${index})">Complete</button>
             </td>
         </tr>`;
     userTableBody.innerHTML += row;

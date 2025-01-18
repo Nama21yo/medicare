@@ -86,11 +86,11 @@ function renderUsers(users) {
             ? "Pending"
             : user.status === 3
                 ? "Resolved Pending"
-                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-primary btn-sm\" onclick=\"viewRecordHistory(").concat(index, ")\">View Record</button>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
+                : "Not Pending", "</td>\n            <td>\n                <button class=\"btn btn-primary btn-sm\" onclick=\"viewRecordHistory(").concat(index, ")\">View Record</button>\n                <button class=\"btn btn-secondary btn-sm pend-btn\" style=\"color: yellow;\" onclick=\"pendUser(").concat(index, ")\">\n                    ").concat(user.status === 2
             ? "Unpend"
             : user.status === 3
                 ? "Pend"
-                : "Pend", "\n                </button>\n                <button class=\"btn btn-success btn-sm\" onclick=\"completeUser(").concat(index, ")\">Complete</button>\n            </td>\n        </tr>");
+                : "Pend", "\n                </button>\n                <button class=\"btn btn-success btn-sm\" style=\"color: green;\" onclick=\"completeUser(").concat(index, ")\">Complete</button>\n            </td>\n        </tr>");
         userTableBody.innerHTML += row;
     });
     updateCounters();
