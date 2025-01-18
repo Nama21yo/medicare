@@ -339,6 +339,8 @@ var addToQueue = function (patient_id) { return __awaiter(_this, void 0, void 0,
                 users.push(queueEntry);
                 activeEntries++;
                 renderUsers(users);
+                document.getElementById("searchDatabase").value = "";
+                document.getElementById("results").innerHTML = "";
                 return [3 /*break*/, 5];
             case 4:
                 error_6 = _a.sent();

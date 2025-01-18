@@ -336,6 +336,9 @@ const addToQueue = async (patient_id: number): Promise<void> => {
     activeEntries++;
     renderUsers(users);
 
+    (document.getElementById("searchDatabase") as HTMLInputElement).value = ""; 
+    document.getElementById("results")!.innerHTML = "";
+
   } catch (error) {
     console.error("Error adding user to queue:", error);
   }
