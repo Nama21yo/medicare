@@ -47,6 +47,8 @@ const fetchData = async (): Promise<void> => {
 };
 
 // Renders the queue database in a table
+
+
 function renderUsers(users: Queue[]): void {
   const userTableBody = document.getElementById("userTableBody") as HTMLElement;
   userTableBody.innerHTML = "";
