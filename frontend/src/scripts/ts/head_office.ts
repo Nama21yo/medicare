@@ -213,6 +213,7 @@ const addBranch = async (event: Event): Promise<void> => {
     confirmation.style.backgroundColor = "lightgreen";
     confirmation.style.color = "green";
     pendingBranches++;
+    updateCounters();
 
     // Show the confirmation for a few seconds
     setTimeout(() => {
