@@ -65,11 +65,12 @@ if (
 
       if (!response.ok) throw new Error("Login failed");
 
-      if (!response.ok) throw new Error("Login failed");
+      //if (!response.ok) throw new Error("Login failed");
 
-      const { token } = await response.json();
+      const { token, user } = await response.json();
       // Store the JWT token
       localStorage.setItem("jwtToken", token);
+      localStorage.setItem("profileData", JSON.stringify(user));
 
       const roleId = parseInt(role); // Update roleId based on login response
       // Navigate based on roleId
@@ -226,10 +227,11 @@ if (
 
       // if (!response) throw new Error("Signup failed");
 
-      const { token } = await response.json();
+      const { token, user } = await response.json();
 
       // Store the JWT token
       localStorage.setItem("jwtToken", token);
+      localStorage.setItem("profileData", JSON.stringify(user));
 
       // Navigate based on roleId
       switch (roleId) {
