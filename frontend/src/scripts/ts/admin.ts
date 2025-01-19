@@ -74,6 +74,27 @@ const renderEmployees = (employees: User[]): void => {
   updateEmployeeCounters();
 };
 
+// Print table
+// Function to print the employee table
+const printTable = (): void => {
+  const printContent = document.getElementById("userTable")?.outerHTML;
+  const originalContent = document.body.innerHTML;
+
+  if (printContent) {
+    document.body.innerHTML = `
+      <html>
+        <head>
+          <title>Print Table</title>
+          <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body>${printContent}</body>
+      </html>
+    `;
+    window.print();
+    document.body.innerHTML = originalContent;
+  }
+};
+
 // Delete User
 const deleteEmployee = async (index: number): Promise<void> => {
   const userToBeDeleted = employees[index];

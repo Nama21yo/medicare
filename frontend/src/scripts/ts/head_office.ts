@@ -39,6 +39,28 @@ const fetchBranchData = async (): Promise<void> => {
   }
 };
 
+// Print table
+// Function to print the employee table
+const printTable = (): void => {
+  const printContent = document.getElementById("userTable")?.outerHTML;
+  const originalContent = document.body.innerHTML;
+
+  if (printContent) {
+    document.body.innerHTML = `
+      <html>
+        <head>
+          <title>Print Table</title>
+          <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body>${printContent}</body>
+      </html>
+    `;
+    window.print();
+    document.body.innerHTML = originalContent;
+  }
+};
+
+
 // Sample data
 // const branches: Branch[] = [
 //     { name: "Kabgar Orthopedic Center", contact_email: "orthopedic@kabgar.com", location: "Mekanissa Mikchael", specialization: null, branch_id: "001" },
