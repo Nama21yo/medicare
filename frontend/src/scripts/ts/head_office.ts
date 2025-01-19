@@ -45,6 +45,11 @@ const printTable = (): void => {
   const printContent = document.getElementById("branchTable")?.outerHTML;
   const originalContent = document.body.innerHTML;
 
+  // Hide the last column before printing
+  document.querySelectorAll("#userTable th:nth-last-child(1), #userTable td:nth-last-child(1)").forEach(el => {
+    el.classList.add("d-none");
+  });
+
   if (printContent) {
     document.body.innerHTML = `
       <html>
@@ -58,6 +63,11 @@ const printTable = (): void => {
     window.print();
     document.body.innerHTML = originalContent;
   }
+
+  // Show the last column after printing
+  document.querySelectorAll("#userTable th:nth-last-child(1), #userTable td:nth-last-child(1)").forEach(el => {
+    el.classList.remove("d-none");
+  });
 };
 
 
