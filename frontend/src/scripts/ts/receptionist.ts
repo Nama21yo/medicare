@@ -235,12 +235,12 @@ const filterUsers = (): void => {
 
   const filteredUsers = users.filter((user) => {
     return (
-      user.patient.first_name.toLowerCase().includes(searchValue) ||
-      user.patient.last_name.toLowerCase().includes(searchValue) ||
+      user.patient.first_name.toLowerCase().startsWith(searchValue) ||
+      user.patient.last_name.toLowerCase().startsWith(searchValue) ||
       new Date(user.created_at)
         .toLocaleString()
         .toLowerCase()
-        .includes(searchValue) ||
+        .startsWith(searchValue) ||
       (user.status === 1
         ? "Not Pending"
         : user.status === 2
@@ -248,7 +248,7 @@ const filterUsers = (): void => {
         : "Resolved Pending"
       )
         .toLowerCase()
-        .includes(searchValue)
+        .startsWith(searchValue)
     );
   });
   renderUsers(filteredUsers);

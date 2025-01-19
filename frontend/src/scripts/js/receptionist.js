@@ -241,19 +241,19 @@ var addUser = function (event) { return __awaiter(_this, void 0, void 0, functio
 var filterUsers = function () {
     var searchValue = document.getElementById("searchInput").value.toLowerCase();
     var filteredUsers = users.filter(function (user) {
-        return (user.patient.first_name.toLowerCase().includes(searchValue) ||
-            user.patient.last_name.toLowerCase().includes(searchValue) ||
+        return (user.patient.first_name.toLowerCase().startsWith(searchValue) ||
+            user.patient.last_name.toLowerCase().startsWith(searchValue) ||
             new Date(user.created_at)
                 .toLocaleString()
                 .toLowerCase()
-                .includes(searchValue) ||
+                .startsWith(searchValue) ||
             (user.status === 1
                 ? "Not Pending"
                 : user.status === 2
                     ? "Pending"
                     : "Resolved Pending")
                 .toLowerCase()
-                .includes(searchValue));
+                .startsWith(searchValue));
     });
     renderUsers(filteredUsers);
 };
