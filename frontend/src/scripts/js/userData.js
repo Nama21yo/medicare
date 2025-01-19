@@ -240,8 +240,8 @@ function redirectToHome() {
             if (data.role.name === "branch") {
                 window.location.href = "./admin.html";
             }
-            else if (data.role.name === "headoffice") {
-                window.location.href = "./head_office.html";
+            else if (data.role.name === "patient") {
+                window.location.href = "./patient.html";
             }
             else if (data.role.name === "receptionist") {
                 window.location.href = "./receptionist_queue.html";
@@ -250,7 +250,7 @@ function redirectToHome() {
                 window.location.href = "./doctor_queue.html";
             }
             else {
-                window.location.href = "./patient.html";
+                window.location.href = "./head_office.html";
             }
         }
         else {
