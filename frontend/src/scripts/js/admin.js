@@ -145,11 +145,11 @@ function updateEmployeeCounters() {
 }
 // Modal Functionalities
 function openAddEmployeeModal() {
-    document.getElementById("addBranchModal").style.display =
+    document.getElementById("addEmployeeModal").style.display =
         "block";
 }
 function closeAddEmployeeModal() {
-    document.getElementById("addBranchModal").style.display =
+    document.getElementById("addEmployeeModal").style.display =
         "none";
 }
 var addEmployee = function (event) { return __awaiter(_this, void 0, void 0, function () {

@@ -133,12 +133,12 @@ function updateEmployeeCounters(): void {
 
 // Modal Functionalities
 function openAddEmployeeModal(): void {
-  (document.getElementById("addBranchModal") as HTMLElement).style.display =
+  (document.getElementById("addEmployeeModal") as HTMLElement).style.display =
     "block";
 }
 
 function closeAddEmployeeModal(): void {
-  (document.getElementById("addBranchModal") as HTMLElement).style.display =
+  (document.getElementById("addEmployeeModal") as HTMLElement).style.display =
     "none";
 }
 
