@@ -211,9 +211,14 @@
               </div>
             </div> -->
           </div>
-          <button class="btn btn-primary mb-3" onclick="openAddEmployeeModal()">
-            Add Employee
-          </button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn btn-primary me-2" onclick="openAddEmployeeModal()">
+              Add Employee
+            </button>
+            <button id="printButton" class="btn btn-primary" onclick="printTable()">
+              Print Table
+            </button>
+          </div>
 
           <input
             type="text"
