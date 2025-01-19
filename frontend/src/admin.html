@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/custome_admin.css" />
     <link rel="stylesheet" href="css/sidebar.css" />
     <link rel="stylesheet" href="" />
-    <title>Admin Dashboard</title>
+    <title>Branch Dashboard</title>
   </head>
   <body>
     <div class="wrapper">
@@ -105,7 +105,7 @@
         </header>
 
         <div class="container mt-5">
-          <h2 class="mb-4">Admin Dashboard</h2>
+          <h2 class="mb-4">Branch Dashboard</h2>
           <div class="card-deck mb-4">
             <div class="card">
               <div class="card-body">
@@ -211,6 +211,9 @@
               </div>
             </div> -->
           </div>
+          <button class="btn btn-primary mb-3" onclick="openAddEmployeeModal()">
+            Add Employee
+          </button>
 
           <input
             type="text"
@@ -231,6 +234,55 @@
             </thead>
             <tbody id="userTableBody"></tbody>
           </table>
+        </div>
+
+        <!-- Add doctor -->
+        <div class="modal" id="addEmployeeModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Add Employee</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  onclick="closeAddBranchModal()"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form id="addEmployeeForm" onsubmit="addEmployee(event)">
+                  <div class="mb-3">
+                    <label for="employeeName" class="form-label">Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="employeeName"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="employeeRole" class="form-label">Email</label>
+                    <select name="employeeRole" id="employeeRole">
+                      <option value="4">Doctor</option>
+                      <option value="5">Receptionist</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="employeeEmail" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="employeeEmail"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    Add Employee
+                  </button>
+                </form>
+                <div class="confirmation" style="margin: 0.5rem"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

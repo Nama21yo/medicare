@@ -131,6 +131,116 @@ function updateEmployeeCounters(): void {
     totalReceptionists.toString();
 }
 
+// Modal Functionalities
+function openAddEmployeeModal(): void {
+  (document.getElementById("addBranchModal") as HTMLElement).style.display =
+    "block";
+}
+
+function closeAddEmployeeModal(): void {
+  (document.getElementById("addBranchModal") as HTMLElement).style.display =
+    "none";
+}
+
+const addEmployee = async (event: Event): Promise<void> => {
+  event.preventDefault();
+
+  const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    console.error("No token found in local storage");
+    return;
+  }
+
+  const base64Payload = token.split(".")[1];
+  const payload = JSON.parse(atob(base64Payload));
+  const branchId = payload.branch_id;
+
+  const employeeName = (document.getElementById("employeeName") as HTMLInputElement)
+    .value;
+  const employeeRole = (document.getElementById("employeeRole") as HTMLInputElement)
+    .value;
+  const employeeEmail = (document.getElementById("employeeEmail") as HTMLInputElement)
+    .value;
+
+  const employeeData = {
+    name: employeeName,
+    role: employeeRole,
+    email: employeeEmail,
+    branch_id: branchId,
+  };
+
+  if (employeeRole === "4") {
+    try {
+      const employeeResponse = await fetch("http://localhost:4000/api/v1/doctors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(employeeData),
+      });
+  
+      if (employeeResponse.status !== 201) {
+        throw new Error("Failed to register employee");
+      }
+  
+      const employee = await employeeResponse.json();
+  
+      const confirmation = document.querySelector(".confirmation") as HTMLElement;
+      confirmation.innerText = "Employee added successfully";
+      confirmation.classList.add("alert", "alert-success");
+      confirmation.style.backgroundColor = "lightgreen";
+      confirmation.style.color = "green";
+  
+      // Show the confirmation for a few seconds
+      setTimeout(() => {
+        confirmation.innerText = "";
+        confirmation.classList.remove("alert", "alert-success");
+        closeAddEmployeeModal();
+      }, 3000); // 3000ms = 3 seconds
+    } catch (error) {
+      console.error("Error adding employee:", error);
+    }
+
+  }
+  else {
+    try {
+      const employeeResponse = await fetch("http://localhost:4000/api/v1/receptionists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(employeeData),
+      });
+  
+      if (employeeResponse.status !== 201) {
+        throw new Error("Failed to register employee");
+      }
+  
+      const employee = await employeeResponse.json();
+  
+      const confirmation = document.querySelector(".confirmation") as HTMLElement;
+      confirmation.innerText = "Employee added successfully";
+      confirmation.classList.add("alert", "alert-success");
+      confirmation.style.backgroundColor = "lightgreen";
+      confirmation.style.color = "green";
+  
+      // Show the confirmation for a few seconds
+      setTimeout(() => {
+        confirmation.innerText = "";
+        confirmation.classList.remove("alert", "alert-success");
+        closeAddEmployeeModal();
+      }, 3000); // 3000ms = 3 seconds
+    } catch (error) {
+      console.error("Error adding employee:", error);
+    }
+  }
+
+  
+};
+
+
 // Logs out the user by clearing the JWT and redirecting to the login page
 function logoutUser(): void {
   localStorage.removeItem("jwtToken");
