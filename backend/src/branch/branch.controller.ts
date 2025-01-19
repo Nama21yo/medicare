@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { BranchService } from './branch.service';
 import { CreateBranchDto } from './dto/CreateBranchDto.dto';
 import { BranchSignupDto } from './dto/BranchSignUpDto.dto';
@@ -38,5 +46,14 @@ export class BranchController {
   @Get()
   async findAll(): Promise<Branch[]> {
     return this.branchService.findAll();
+  }
+
+  /**
+   * @route DELETE /v1/branches/:id
+   * @description Delete a branch by ID
+   */
+  @Delete(':id')
+  async delete(@Param('id') id: number): Promise<void> {
+    return this.branchService.delete(id);
   }
 }

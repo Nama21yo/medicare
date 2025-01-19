@@ -100,4 +100,11 @@ export class BranchService {
     // Save the updated branch details
     return this.branchRepository.save(branch);
   }
+
+  async delete(id: number): Promise<void> {
+    const result = await this.branchRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Branch with ID ${id} not found`);
+    }
+  }
 }
