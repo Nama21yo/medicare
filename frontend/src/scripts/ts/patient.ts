@@ -79,6 +79,35 @@ function renderDiagnoses(diagnoses: Diagnosis[]): void {
   updateCounters();
 }
 
+const printTable = (): void => {
+  const printContent = document.getElementById("diagnosisTable")?.outerHTML;
+  const originalContent = document.body.innerHTML;
+
+  // Hide the last column before printing
+  document.querySelectorAll("#userTable th:nth-last-child(1), #userTable td:nth-last-child(1)").forEach(el => {
+    el.classList.add("d-none");
+  });
+
+  if (printContent) {
+    document.body.innerHTML = `
+      <html>
+        <head>
+          <title>Print Table</title>
+          <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body>${printContent}</body>
+      </html>
+    `;
+    window.print();
+    document.body.innerHTML = originalContent;
+  }
+
+  // Show the last column after printing
+  document.querySelectorAll("#userTable th:nth-last-child(1), #userTable td:nth-last-child(1)").forEach(el => {
+    el.classList.remove("d-none");
+  });
+};
+
 function isVisible(index: number): void {
   const diagnosis = diagnoses[index];
   if (diagnosis.visible === true) {
