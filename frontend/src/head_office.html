@@ -175,12 +175,15 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary mb-3" onclick="openAddBranchModal()">
-            Add Branch
-          </button>
-          <button id="printButton" class="btn btn-primary" onclick="printTable()">
-            Print Table
-          </button>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn btn-primary me-2" onclick="openAddBranchModal()">
+              Add Branch
+            </button>
+            <button id="printButton" class="btn btn-primary" onclick="printTable()">
+              Print Table
+            </button>
+          </div>
+          
 
           <input
             type="text"
@@ -189,7 +192,7 @@
             placeholder="Search for branches..."
             oninput="filterBranches()"
           />
-          <table class="table table-bordered">
+          <table class="table table-bordered" id="branchTable">
             <thead>
               <tr>
                 <th>Name</th>

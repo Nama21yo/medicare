@@ -77,7 +77,7 @@ const renderEmployees = (employees: User[]): void => {
 // Print table
 // Function to print the employee table
 const printTable = (): void => {
-  const printContent = document.getElementById("userTable")?.outerHTML;
+  const printContent = document.getElementById("userList")?.outerHTML;
   const originalContent = document.body.innerHTML;
 
   if (printContent) {

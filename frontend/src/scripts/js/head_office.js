@@ -70,7 +70,7 @@ var fetchBranchData = function () { return __awaiter(_this, void 0, void 0, func
 // Function to print the employee table
 var printTable = function () {
     var _a;
-    var printContent = (_a = document.getElementById("branchTableBody")) === null || _a === void 0 ? void 0 : _a.outerHTML;
+    var printContent = (_a = document.getElementById("branchTable")) === null || _a === void 0 ? void 0 : _a.outerHTML;
     var originalContent = document.body.innerHTML;
     if (printContent) {
         document.body.innerHTML = "\n      <html>\n        <head>\n          <title>Print Table</title>\n          <link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" rel=\"stylesheet\">\n        </head>\n        <body>".concat(printContent, "</body>\n      </html>\n    ");
