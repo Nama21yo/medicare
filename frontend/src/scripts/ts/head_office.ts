@@ -6,6 +6,7 @@ interface Branch {
   specialization: string | null;
   branch_id: string;
   doctor: Doctor;
+  is_signed_up: boolean;
   created_at: string;
   updated_at: string;
   recepetionist: Recepetionist;
@@ -25,8 +26,7 @@ const fetchBranchData = async (): Promise<void> => {
       (branch) =>
         branch.name &&
         branch.location &&
-        branch.specialization &&
-        branch.contact_email
+        branch.is_signed_up
     );
 
     totalBranches = completeBranches.length;
@@ -181,6 +181,9 @@ const addBranch = async (event: Event): Promise<void> => {
   const branchLocation = (
     document.getElementById("branchLocation") as HTMLInputElement
   ).value;
+  const branchSpecialization = (
+    document.getElementById("branchSpecialization") as HTMLInputElement
+  ).value;
   const headOfficeId: number = 1;
 
   // Register the branch
@@ -189,6 +192,7 @@ const addBranch = async (event: Event): Promise<void> => {
     contact_email: branchEmail,
     location: branchLocation,
     headoffice_id: headOfficeId,
+    specialization: branchSpecialization,
   };
 
   try {
