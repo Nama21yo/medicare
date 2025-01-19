@@ -42,7 +42,7 @@ const fetchBranchData = async (): Promise<void> => {
 // Print table
 // Function to print the employee table
 const printTable = (): void => {
-  const printContent = document.getElementById("branchTableBody")?.outerHTML;
+  const printContent = document.getElementById("branchTable")?.outerHTML;
   const originalContent = document.body.innerHTML;
 
   if (printContent) {

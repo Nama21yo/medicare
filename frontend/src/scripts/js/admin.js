@@ -88,6 +88,18 @@ var renderEmployees = function (employees) {
     });
     updateEmployeeCounters();
 };
+// Print table
+// Function to print the employee table
+var printTable = function () {
+    var _a;
+    var printContent = (_a = document.getElementById("userList")) === null || _a === void 0 ? void 0 : _a.outerHTML;
+    var originalContent = document.body.innerHTML;
+    if (printContent) {
+        document.body.innerHTML = "\n      <html>\n        <head>\n          <title>Print Table</title>\n          <link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css\" rel=\"stylesheet\">\n        </head>\n        <body>".concat(printContent, "</body>\n      </html>\n    ");
+        window.print();
+        document.body.innerHTML = originalContent;
+    }
+};
 // Delete User
 var deleteEmployee = function (index) { return __awaiter(_this, void 0, void 0, function () {
     var userToBeDeleted, response, error_2;

@@ -51,7 +51,11 @@ var fetchBranchData = function () { return __awaiter(_this, void 0, void 0, func
                 return [4 /*yield*/, response.json()];
             case 2:
                 branches_1 = _a.sent();
-                completeBranches = branches_1.filter(function (branch) { return branch.name && branch.location && branch.specialization && branch.contact_email; });
+                completeBranches = branches_1.filter(function (branch) {
+                    return branch.name &&
+                        branch.location &&
+                        branch.is_signed_up;
+                });
                 totalBranches = completeBranches.length;
                 pendingBranches = branches_1.length - completeBranches.length;
                 // You can add a function to render or use these variables as needed
@@ -91,10 +95,13 @@ var fetchBranchData = function () { return __awaiter(_this, void 0, void 0, func
 // };
 // Renders the user table
 function renderBranches(branches) {
-    var branchTableBody = document.getElementById('branchTableBody');
-    branchTableBody.innerHTML = '';
+    var branchTableBody = document.getElementById("branchTableBody");
+    branchTableBody.innerHTML = "";
     branches.forEach(function (branch, index) {
-        var row = "<tr>\n            <td>".concat(branch.name, "</td>\n            <td>").concat(branch.contact_email, "</td>\n            <td>").concat(branch.location, "</td>\n            <td>").concat(branch.specialization, "</td>\n            <td>\n                <button class=\"btn btn-danger btn-sm\" onclick=\"deleteBranch(").concat([branch.branch_id, index], ")\">Delete</button>\n            </td>\n        </tr>");
+        var row = "<tr>\n            <td>".concat(branch.name, "</td>\n            <td>").concat(branch.contact_email, "</td>\n            <td>").concat(branch.location, "</td>\n            <td>").concat(branch.specialization, "</td>\n            <td>\n                <button class=\"btn btn-danger btn-sm\" onclick=\"deleteBranch(").concat([
+            branch.branch_id,
+            index,
+        ], ")\">Delete</button>\n            </td>\n        </tr>");
         branchTableBody.innerHTML += row;
     });
     updateCounters();
@@ -113,6 +120,7 @@ var deleteBranch = function (info) { return __awaiter(_this, void 0, void 0, fun
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, fetch("http://localhost:4000/api/v1/branches/".concat(info[0]), {
+                        // Check userId or user_id
                         method: "DELETE",
                     })];
             case 1:
@@ -132,7 +140,7 @@ var deleteBranch = function (info) { return __awaiter(_this, void 0, void 0, fun
 }); };
 // Implements search functionality
 function filterBranches() {
-    var searchValue = document.getElementById('searchInput').value.toLowerCase();
+    var searchValue = document.getElementById("searchInput").value.toLowerCase();
     var filteredBranches = branches.filter(function (branch) {
         var _a;
         return branch.name.toLowerCase().startsWith(searchValue) ||
@@ -144,17 +152,21 @@ function filterBranches() {
 }
 // Updates the counters for total doctors, receptionists, and restricted accounts
 function updateCounters() {
-    document.getElementById('totalBranches').innerText = totalBranches.toString();
-    document.getElementById('pendingBranches').innerText = pendingBranches.toString();
+    document.getElementById("totalBranches").innerText =
+        totalBranches.toString();
+    document.getElementById("pendingBranches").innerText =
+        pendingBranches.toString();
     // (document.getElementById('totalReceptionists') as HTMLElement).innerText = totalReceptionists.toString();
     // (document.getElementById('restrictedAccounts') as HTMLElement).innerText = restrictedAccounts.toString();
 }
 // Modal Functionalities
 function openAddBranchModal() {
-    document.getElementById('addBranchModal').style.display = 'block';
+    document.getElementById("addBranchModal").style.display =
+        "block";
 }
 function closeAddBranchModal() {
-    document.getElementById('addBranchModal').style.display = 'none';
+    document.getElementById("addBranchModal").style.display =
+        "none";
 }
 // function addBranch(event: Event): void {
 //     event.preventDefault();
@@ -176,20 +188,23 @@ function closeAddBranchModal() {
 //     closeAddBranchModal();
 // }
 var addBranch = function (event) { return __awaiter(_this, void 0, void 0, function () {
-    var branchName, branchEmail, branchLocation, headOfficeId, branchData, branchResponse, confirmation_1, error_3;
+    var branchName, branchEmail, branchLocation, branchSpecialization, headOfficeId, branchData, branchResponse, confirmation_1, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 event.preventDefault();
-                branchName = document.getElementById('branchName').value;
-                branchEmail = document.getElementById('branchEmail').value;
-                branchLocation = document.getElementById('branchLocation').value;
+                branchName = document.getElementById("branchName")
+                    .value;
+                branchEmail = document.getElementById("branchEmail").value;
+                branchLocation = document.getElementById("branchLocation").value;
+                branchSpecialization = document.getElementById("branchSpecialization").value;
                 headOfficeId = 1;
                 branchData = {
                     name: branchName,
                     contact_email: branchEmail,
                     location: branchLocation,
                     headoffice_id: headOfficeId,
+                    specialization: branchSpecialization,
                 };
                 _a.label = 1;
             case 1:
@@ -211,6 +226,7 @@ var addBranch = function (event) { return __awaiter(_this, void 0, void 0, funct
                 confirmation_1.style.backgroundColor = "lightgreen";
                 confirmation_1.style.color = "green";
                 pendingBranches++;
+                updateCounters();
                 // Show the confirmation for a few seconds
                 setTimeout(function () {
                     confirmation_1.innerText = "";
@@ -227,6 +243,6 @@ var addBranch = function (event) { return __awaiter(_this, void 0, void 0, funct
     });
 }); };
 // Initial rendering of users
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
     fetchBranchData();
 });
