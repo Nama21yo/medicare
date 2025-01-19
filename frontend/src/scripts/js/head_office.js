@@ -51,11 +51,7 @@ var fetchBranchData = function () { return __awaiter(_this, void 0, void 0, func
                 return [4 /*yield*/, response.json()];
             case 2:
                 branches_1 = _a.sent();
-                completeBranches = branches_1.filter(function (branch) {
-                    return branch.name &&
-                        branch.location &&
-                        branch.is_signed_up;
-                });
+                completeBranches = branches_1.filter(function (branch) { return branch.name && branch.location && branch.is_signed_up; });
                 totalBranches = completeBranches.length;
                 pendingBranches = branches_1.length - completeBranches.length;
                 // You can add a function to render or use these variables as needed
@@ -118,10 +114,7 @@ function renderBranches(branches) {
     var branchTableBody = document.getElementById("branchTableBody");
     branchTableBody.innerHTML = "";
     branches.forEach(function (branch, index) {
-        var row = "<tr>\n            <td>".concat(branch.name, "</td>\n            <td>").concat(branch.contact_email, "</td>\n            <td>").concat(branch.location, "</td>\n            <td>").concat(branch.specialization, "</td>\n            <td>\n                <button class=\"btn btn-danger btn-sm\" onclick=\"deleteBranch(").concat([
-            branch.branch_id,
-            index,
-        ], ")\">Delete</button>\n            </td>\n        </tr>");
+        var row = "<tr>\n            <td>".concat(branch.name, "</td>\n            <td>").concat(branch.contact_email, "</td>\n            <td>").concat(branch.location, "</td>\n            <td>").concat(branch.specialization, "</td>\n            <td>\n                <button class=\"btn btn-danger btn-sm\" onclick=\"deleteBranch('").concat(branch.branch_id, "', ").concat(index, ")\">Delete</button>\n            </td>\n        </tr>");
         branchTableBody.innerHTML += row;
     });
     updateCounters();

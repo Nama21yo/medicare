@@ -23,10 +23,7 @@ const fetchBranchData = async (): Promise<void> => {
     const branches: Branch[] = await response.json();
     // Update the counters based on the fetched branches
     let completeBranches = branches.filter(
-      (branch) =>
-        branch.name &&
-        branch.location &&
-        branch.is_signed_up
+      (branch) => branch.name && branch.location && branch.is_signed_up
     );
 
     totalBranches = completeBranches.length;
@@ -70,7 +67,6 @@ const printTable = (): void => {
   });
 };
 
-
 // Sample data
 // const branches: Branch[] = [
 //     { name: "Kabgar Orthopedic Center", contact_email: "orthopedic@kabgar.com", location: "Mekanissa Mikchael", specialization: null, branch_id: "001" },
@@ -109,10 +105,7 @@ function renderBranches(branches: Branch[]): void {
             <td>${branch.location}</td>
             <td>${branch.specialization}</td>
             <td>
-                <button class="btn btn-danger btn-sm" onclick="deleteBranch(${[
-                  branch.branch_id,
-                  index,
-                ]})">Delete</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteBranch('${branch.branch_id}', ${index})">Delete</button>
             </td>
         </tr>`;
     branchTableBody.innerHTML += row;
