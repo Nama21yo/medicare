@@ -21,11 +21,14 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { BranchService } from 'src/branch/branch.service';
 import { BranchSignupDto } from 'src/branch/dto/BranchSignUpDto.dto';
 import { DoctorService } from 'src/doctor/doctor.service';
+import { PatientService } from 'src/patient/patient.service';
 import { DoctorSignupDto } from 'src/doctor/dto/doctorSignUp.dto';
 import { ReceptionistService } from 'src/receptionist/receptionist.service';
 import { ReceptionistSignupDto } from 'src/receptionist/dto/receptionistSignup.dto';
 import * as bcryptjs from 'bcryptjs';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { PatientSignupDto } from 'src/patient/dto/patientSignUp.dto';
+import { Patient } from 'src/patient/patient.entity';
 
 @Controller('v1/users')
 @UseGuards(RolesGuard)
@@ -37,6 +40,7 @@ export class UserController {
     private readonly branchService: BranchService,
     private readonly doctorService: DoctorService,
     private readonly receptionistService: ReceptionistService,
+    private readonly patientService: PatientService,
   ) {}
 
   /**
@@ -88,6 +92,37 @@ export class UserController {
 
     const branch = await this.branchService.signup(email, dto);
     return { user, branch, token };
+  }
+
+  /**
+   * @route POST /v1/patients/signup/:email
+   * @description Sign up as a patient
+   */
+  @Post('patients/signup/:email')
+  async patientSignup(
+    @Param('email') email: string,
+    @Body() dto: PatientSignupDto,
+  ): Promise<{ user: User; patient: Patient; token: string }> {
+    const hashedPassword = await bcryptjs.hash(dto.password, 10); // Hash the password
+
+    // Create the user
+    const user = await this.userService.create({
+      email,
+      username: dto.username,
+      password: hashedPassword,
+      roleId: 6, // Role ID for patient
+    });
+
+    // Create the patient
+    const patient = await this.patientService.signup(email, dto.username);
+
+    // Generate JWT token
+    const token = await this.jwtService.signAsync({
+      id: user.user_id,
+      role: user.role.name,
+    });
+
+    return { user, patient, token };
   }
 
   /**

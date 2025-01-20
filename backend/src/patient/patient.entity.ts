@@ -8,7 +8,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
-
 @Entity('patients')
 export class Patient {
   @PrimaryGeneratedColumn()
@@ -34,6 +33,9 @@ export class Patient {
 
   @Column({ type: 'text', nullable: true })
   address: string;
+
+  @Column({ nullable: true }) // Password is optional initially
+  password: string;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' }) // Linked to receptionist (registered by)
   @JoinColumn({ name: 'registered_by' })

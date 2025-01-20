@@ -10,6 +10,7 @@ import { TokenService } from './token.service';
 import { BranchModule } from 'src/branch/branch.module';
 import { DoctorModule } from 'src/doctor/doctor.module';
 import { ReceptionistModule } from 'src/receptionist/receptionist.module';
+import { PatientModule } from 'src/patient/patient.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ReceptionistModule } from 'src/receptionist/receptionist.module';
     BranchModule, // Add BranchModule here
     DoctorModule, // Add DoctorModule for DoctorService
     ReceptionistModule, // Add ReceptionistModule for ReceptionistService
+    PatientModule,
   ],
   controllers: [UserController],
   providers: [UserService, TokenService],

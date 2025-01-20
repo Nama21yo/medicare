@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Patient } from './patient.entity';
 import { CreatePatientDto } from './dto/createPatient.dto';
 import { User } from 'src/user/user.entity';
+import { PatientSignupDto } from './dto/patientSignUp.dto';
 
 @Injectable()
 export class PatientService {
@@ -38,6 +39,26 @@ export class PatientService {
     });
 
     return this.patientRepository.save(newPatient);
+  }
+
+  async signup(email: string, username: string): Promise<Patient> {
+    const [first_name, last_name] = username.split('.'); // Split username into first_name and last_name
+
+    const patient = this.patientRepository.create({
+      email,
+      first_name,
+      last_name,
+    });
+
+    return this.patientRepository.save(patient);
+  }
+
+  async findByEmail(email: string): Promise<Patient | undefined> {
+    return this.patientRepository.findOne({ where: { email } });
+  }
+
+  async update(patient: Patient): Promise<Patient> {
+    return this.patientRepository.save(patient);
   }
 
   /**

@@ -211,6 +211,7 @@ if (
       speciality: additionalData.specialization,
     };
     const branchData = { name, password, location: additionalData.location };
+    const patientData = { name, password, email };
     console.log("additional data", additionalData);
 
     console.log("registered data", userData);
@@ -221,6 +222,9 @@ if (
       if (roleId === 2) {
         endpoint = `http://localhost:4000/api/v1/users/branches/signup/${email}`;
         userData = branchData;
+      } else if (roleId == 3) {
+        endpoint = `http://localhost:4000/api/v1/users/patients/signup/${email}`;
+        userData = patientData;
       } else if (roleId === 4) {
         endpoint = `http://localhost:4000/api/v1/users/doctors/signup/${email}`;
         userData = doctorData;
@@ -242,7 +246,7 @@ if (
 
       // Store the JWT token
       localStorage.setItem("jwtToken", token);
-      const userId = user.id; 
+      const userId = user.id;
       // localStorage.setItem(`profileData_${userId}`, JSON.stringify(user));
 
       // Navigate based on roleId
@@ -255,7 +259,8 @@ if (
             "http://127.0.0.1:5500/frontend/src/admin.html";
           break;
         case 3:
-          window.location.href = "/patient";
+          window.location.href =
+            "http://127.0.0.1:5500/frontend/src/patient.html";
           break;
         case 4:
           window.location.href =
